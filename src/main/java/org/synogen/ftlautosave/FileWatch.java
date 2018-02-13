@@ -9,18 +9,18 @@ import java.util.logging.Logger;
 
 public class FileWatch extends Thread {
 
-	private final Logger log;
+	private final Logger LOG;
 
 	private String filename;
 
 	public FileWatch(String filename) {
 		this.filename = filename;
-		log = Logger.getLogger("FileWatch (" + this.filename + ")");
+		LOG = Logger.getLogger("FileWatch (" + this.filename + ")");
 	}
 
 	@Override
 	public void run() {
-		log.info("Watching " + filename);
+		LOG.info("Watching " + filename);
 
 		Path root = Paths.get(".");
 		
@@ -37,20 +37,20 @@ public class FileWatch extends Thread {
 
 				try {
 					if (currentModification.compareTo(previousModification) != 0) {
-						log.info(filename + " has changed, saving new backup");
+						LOG.info(filename + " has changed, saving new backup");
 						Path backup = file.resolveSibling(file.getFileName() + "." + currentModification);
 						Files.copy(file, backup, StandardCopyOption.REPLACE_EXISTING);
 						previousModification = currentModification;
 					}
 				} catch (IOException e) {
-					log.warning("Error while creating backup of " + filename + ":");
+					LOG.warning("Error while creating backup of " + filename + ":");
 					e.printStackTrace();
 				}
 				
-				sleep(Config.WATCH_INTERVAL);
+				sleep(App.config.getWatchInterval());
 			}
 		} catch (InterruptedException e) {
-			log.info("Exiting file watch for " + filename);
+			LOG.info("Exiting file watch for " + filename);
 		}
 	}
 	

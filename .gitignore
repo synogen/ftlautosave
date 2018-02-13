@@ -3,3 +3,4 @@ target
 *.sav*
 ftlautosave.iml
 dist/ftlautosave.jar
+config.json
