@@ -2,3 +2,4 @@
 target
 *.sav*
 ftlautosave.iml
+dist/ftlautosave.jar
