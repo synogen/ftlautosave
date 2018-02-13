@@ -28,6 +28,17 @@
             <artifactId>copy-rename-maven-plugin</artifactId>
             <version>1.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.20</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -45,6 +56,29 @@
                 </configuration>
             </plugin>
             <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>org.synogen.ftlautosave.App</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>com.coderplus.maven.plugins</groupId>
                 <artifactId>copy-rename-maven-plugin</artifactId>
                 <version>1.0.1</version>
@@ -56,7 +90,7 @@
                             <goal>copy</goal>
                         </goals>
                         <configuration>
-                            <sourceFile>target/ftlautosave-${project.version}.jar</sourceFile>
+                            <sourceFile>target/ftlautosave-${project.version}-jar-with-dependencies.jar</sourceFile>
                             <destinationFile>dist/ftlautosave.jar</destinationFile>
                         </configuration>
                     </execution>
