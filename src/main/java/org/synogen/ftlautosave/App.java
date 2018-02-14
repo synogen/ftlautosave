@@ -1,30 +1,23 @@
 package org.synogen.ftlautosave;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Paths;
 import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
-public class App
-{
+public class App {
     public static Config config;
 
+    public static Logger log;
 
     public static void main( String[] args ) throws IOException {
+        // init logger
         InputStream logConfig = App.class.getClassLoader().getResourceAsStream("logging.properties");
         LogManager.getLogManager().readConfiguration(logConfig);
+        log = Logger.getLogger("ftlautosave");
 
-        ObjectMapper jackson = new ObjectMapper();
-        File configfile = Paths.get("config.json").toFile();
-        if (!configfile.exists()) {
-            jackson.writeValue(configfile, new Config());
-        }
-
-        config = jackson.readValue(configfile, Config.class);
-
+        // load app configuration
+        config = Config.fromFile("config.json");
         for (String filename : config.getFiles()) {
             new FileWatch(filename).start();
         }
