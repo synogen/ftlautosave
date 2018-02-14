@@ -18,17 +18,17 @@ public class Config {
 		this.files.add("ae_prof.sav");
 		this.files.add("continue.sav");
 		if (System.getProperties().getProperty("os.name").contains("Windows")) {
-			savePath = System.getProperties().getProperty("user.home") + "\\My Documents\\My Games\\FasterThanLight";
+			ftlSavePath = System.getProperties().getProperty("user.home") + "\\My Documents\\My Games\\FasterThanLight";
 		} else {
 			// TODO detect FTL save path for other operating systems
-			savePath = "";
+			ftlSavePath = "";
 		}
 
 	}
 
 	private Integer watchInterval;
 	private List<String> files = new ArrayList<>();
-	private String savePath;
+	private String ftlSavePath;
 
 	public static Config fromFile(String filename) {
 		try {

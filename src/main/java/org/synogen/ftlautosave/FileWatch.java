@@ -18,7 +18,7 @@ public class FileWatch extends Thread {
 	public void run() {
 		App.log.info("Watching " + filename);
 
-		Path savePath = Paths.get(App.config.getSavePath());
+		Path savePath = Paths.get(App.config.getFtlSavePath());
 		
 		Long previousModification = 0l;
 		Long currentModification = 0l;

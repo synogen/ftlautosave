@@ -18,6 +18,7 @@ public class App {
 
         // load app configuration
         config = Config.fromFile("config.json");
+        log.info("Using " + config.getFtlSavePath() + " as FTL save path");
         for (String filename : config.getFiles()) {
             new FileWatch(filename).start();
         }
