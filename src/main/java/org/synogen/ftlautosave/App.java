@@ -1,11 +1,17 @@
 package org.synogen.ftlautosave;
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-public class App {
+public class App extends Application {
     public static Config config;
 
     public static Logger log;
@@ -22,5 +28,17 @@ public class App {
         for (String filename : config.getFiles()) {
             new FileWatch(filename).start();
         }
+
+        //launch UI
+        Application.launch(App.class, args);
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        Parent root = FXMLLoader.load(App.class.getClassLoader().getResource("main.fxml"));
+
+        stage.setTitle("ftlautosave");
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 }
