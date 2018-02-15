@@ -6,14 +6,14 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="mainBox" prefHeight="640.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.synogen.ftlautosave.ui.MainController">
+<VBox fx:id="mainBox" prefHeight="640.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.synogen.ftlautosave.ui.MainController">
   <children>
       <BorderPane>
          <center>
             <ListView fx:id="savesList" editable="true" prefHeight="1000.0" prefWidth="380.0" BorderPane.alignment="CENTER" />
          </center>
          <bottom>
-            <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
+            <Button fx:id="loadButton" mnemonicParsing="false" onAction="#restoreAndStartFtl" text="Restore selected save and start FTL" BorderPane.alignment="CENTER" />
          </bottom>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

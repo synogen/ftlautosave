@@ -8,17 +8,15 @@ import java.time.Instant;
 @Data
 public class BackupSave {
 
-    public BackupSave(Path savefile) {
-        this(savefile, null);
-    }
-
     public BackupSave(Path savefile, Path profile) {
         this.savefile = savefile;
         this.profile = profile;
 
-        String[] filename = savefile.getFileName().toString().split("\\.");
-        Long milliseconds = Long.valueOf(filename[filename.length - 1]);
+        String filename = savefile.getFileName().toString();
+        Integer split = filename.lastIndexOf(".");
+        Long milliseconds = Long.valueOf(filename.substring(split + 1));
         timestamp = Instant.ofEpochMilli(milliseconds);
+
     }
 
     private Path savefile;
@@ -27,6 +25,7 @@ public class BackupSave {
 
     @Override
     public String toString() {
-        return timestamp.toString();
+        return timestamp.toString(); //TODO add more info (preferably from the save itself)
     }
+
 }
