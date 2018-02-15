@@ -74,8 +74,14 @@ public class MainController {
     @FXML
     private void restoreSave(ActionEvent event) throws IOException {
         BackupSave save = savesList.getSelectionModel().getSelectedItem();
-        Files.copy(save.getSavefile(),Paths.get(App.config.getFtlSavePath() + "\\" + App.config.getSavefile()), StandardCopyOption.REPLACE_EXISTING);
-        Files.copy(save.getProfile(),Paths.get(App.config.getFtlSavePath() + "\\" + App.config.getProfile()), StandardCopyOption.REPLACE_EXISTING);
+        if (save != null) {
+            Path savefile = Paths.get(App.config.getFtlSavePath() + "\\" + App.config.getSavefile());
+            Path profile = Paths.get(App.config.getFtlSavePath() + "\\" + App.config.getProfile());
+            App.log.info("Copying " + save.getSavefile().toString() + " to " + savefile.toString());
+            Files.copy(save.getSavefile(), savefile, StandardCopyOption.REPLACE_EXISTING);
+            App.log.info("Copying " + save.getProfile().toString() + " to " + profile.toString());
+            Files.copy(save.getProfile(), profile, StandardCopyOption.REPLACE_EXISTING);
+        }
     }
 
     @FXML
