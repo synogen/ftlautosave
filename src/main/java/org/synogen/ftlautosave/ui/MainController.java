@@ -88,7 +88,14 @@ public class MainController {
     private void restoreAndStartFtl(ActionEvent event) throws IOException {
         restoreSave(event);
 
-        //TODO start FTL
+        App.log.info("Starting FTL");
+        Path ftlRunPath = Paths.get(App.config.getFtlRunPath());
+        Path ftlWorkingDirectory = ftlRunPath.getParent();
+
+        new ProcessBuilder()
+                .directory(ftlWorkingDirectory.toFile())
+                .command(ftlRunPath.toString())
+                .start();
     }
 
 }

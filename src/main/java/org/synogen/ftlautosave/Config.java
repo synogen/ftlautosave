@@ -21,6 +21,7 @@ public class Config {
 			// TODO detect FTL save path for other operating systems
 			ftlSavePath = "";
 		}
+		this.ftlRunPath = "FTLGame.exe";
 
 	}
 
@@ -28,6 +29,7 @@ public class Config {
 	private String savefile;
 	private String profile;
 	private String ftlSavePath;
+	private String ftlRunPath;
 
 	public static Config fromFile(String filename) {
 		try {

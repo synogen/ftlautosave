@@ -24,7 +24,7 @@
                <children>
                   <Button fx:id="refresh" mnemonicParsing="false" onAction="#refreshSavesList" text="Refresh list" />
                   <Button fx:id="restore" mnemonicParsing="false" onAction="#restoreSave" text="Restore selected save" />
-                  <Button fx:id="restoreAndStart" disable="true" mnemonicParsing="false" onAction="#restoreAndStartFtl" text="Restore selected save and start FTL" />
+                  <Button fx:id="restoreAndStart" mnemonicParsing="false" onAction="#restoreAndStartFtl" text="Restore selected save and start FTL" />
                </children>
             </FlowPane>
          </bottom>
