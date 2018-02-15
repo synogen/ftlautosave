@@ -8,10 +8,7 @@ import org.synogen.ftlautosave.BackupSave;
 import org.synogen.ftlautosave.Util;
 
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -26,6 +23,12 @@ public class MainController {
 
     @FXML
     public void initialize() throws IOException {
+        refreshSavesList(null);
+    }
+
+    @FXML
+    public void refreshSavesList(ActionEvent event) throws IOException {
+        savesList.getItems().clear();
         Path savePath = Paths.get(App.config.getFtlSavePath());
         DirectoryStream<Path> savefiles = Files.newDirectoryStream(savePath, entry -> {
             if (entry.getFileName().toString().startsWith(App.config.getSavefile() + ".")) {
@@ -69,8 +72,17 @@ public class MainController {
     }
 
     @FXML
-    private void restoreAndStartFtl(ActionEvent event) {
+    private void restoreSave(ActionEvent event) throws IOException {
+        BackupSave save = savesList.getSelectionModel().getSelectedItem();
+        Files.copy(save.getSavefile(),Paths.get(App.config.getFtlSavePath() + "\\" + App.config.getSavefile()), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(save.getProfile(),Paths.get(App.config.getFtlSavePath() + "\\" + App.config.getProfile()), StandardCopyOption.REPLACE_EXISTING);
+    }
 
+    @FXML
+    private void restoreAndStartFtl(ActionEvent event) throws IOException {
+        restoreSave(event);
+
+        //TODO start FTL
     }
 
 }
