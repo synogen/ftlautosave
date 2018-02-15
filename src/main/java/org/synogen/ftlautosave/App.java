@@ -41,4 +41,10 @@ public class App extends Application {
         stage.setScene(new Scene(root));
         stage.show();
     }
+
+    @Override
+    public void stop() throws Exception {
+        App.log.info("Exiting");
+        System.exit(0);
+    }
 }
