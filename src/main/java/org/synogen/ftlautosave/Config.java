@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Data
@@ -21,7 +22,12 @@ public class Config {
 			// TODO detect FTL save path for other operating systems
 			ftlSavePath = "";
 		}
-		this.ftlRunPath = "FTLGame.exe";
+		Path ftl = Paths.get("FTLGame.exe");
+		if (ftl.toFile().exists()) {
+            this.ftlRunPath = ftl.toAbsolutePath().toString();
+        } else {
+			this.ftlRunPath = "FTLGame.exe";
+		}
 
 	}
 
