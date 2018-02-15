@@ -3,7 +3,10 @@ package org.synogen.ftlautosave;
 import lombok.Data;
 
 import java.nio.file.Path;
+import java.time.Duration;
 import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Data
 public class BackupSave {
@@ -25,7 +28,8 @@ public class BackupSave {
 
     @Override
     public String toString() {
-        return timestamp.toString(); //TODO add more info (preferably from the save itself)
+        Duration offset = Duration.of(ZonedDateTime.now().getOffset().getTotalSeconds(), ChronoUnit.SECONDS);
+        return timestamp.plus(offset).toString(); //TODO add more info (preferably from the save itself)
     }
 
 }
