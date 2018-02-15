@@ -5,14 +5,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import org.synogen.ftlautosave.App;
 import org.synogen.ftlautosave.BackupSave;
+import org.synogen.ftlautosave.Util;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class MainController {
 
@@ -22,17 +27,35 @@ public class MainController {
     @FXML
     public void initialize() throws IOException {
         Path savePath = Paths.get(App.config.getFtlSavePath());
-        DirectoryStream<Path> directory = Files.newDirectoryStream(savePath, entry -> {
-            for (String savefile : App.config.getFiles()) {
-                if (entry.getFileName().toString().startsWith(savefile + ".")) {
-                    return true;
-                }
+        DirectoryStream<Path> savefiles = Files.newDirectoryStream(savePath, entry -> {
+            if (entry.getFileName().toString().startsWith(App.config.getSavefile() + ".")) {
+                return true;
+            }
+            return false;
+        });
+        DirectoryStream<Path> profiles = Files.newDirectoryStream(savePath, entry -> {
+            if (entry.getFileName().toString().startsWith(App.config.getProfile() + ".")) {
+                return true;
             }
             return false;
         });
 
-        for (Path entry : directory) {
-            savesList.getItems().add(new BackupSave(entry, null));
+        //convert iterators to list due to error message saying they have the same iterator when looping one iterator inside of the other
+        List<Path> savefilesList = new ArrayList<Path>();
+        savefiles.forEach(savefilesList::add);
+        List<Path> profilesList = new ArrayList<Path>();
+        profiles.forEach(profilesList::add);
+
+        for (Path savefile : savefilesList) {
+            for (Path profile : profilesList) {
+                //find a profile with a timestamp that matches closely
+                Instant saveTime = Util.getTimestamp(savefile.getFileName().toString());
+                Instant profileTime = Util.getTimestamp(profile.getFileName().toString());
+
+                if (Math.abs(saveTime.until(profileTime, ChronoUnit.MILLIS)) < 500) {
+                    savesList.getItems().add(new BackupSave(savefile, profile));
+                }
+            }
         }
         savesList.getItems().sort(Collections.reverseOrder(new SortBackupSaves()));
     }

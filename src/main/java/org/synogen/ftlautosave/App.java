@@ -25,9 +25,9 @@ public class App extends Application {
         // load app configuration
         config = Config.fromFile("config.json");
         log.info("Using " + config.getFtlSavePath() + " as FTL save path");
-        for (String filename : config.getFiles()) {
-            new FileWatch(filename).start();
-        }
+
+        new FileWatch(config.getSavefile()).start();
+        new FileWatch(config.getProfile()).start();
 
         //launch UI
         Application.launch(App.class, args);

@@ -6,8 +6,6 @@ import lombok.Data;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 public class Config {
@@ -15,8 +13,8 @@ public class Config {
 	public Config() {
 		// defaults
 		this.watchInterval = 1000;
-		this.files.add("ae_prof.sav");
-		this.files.add("continue.sav");
+		this.savefile = "ae_prof.sav";
+		this.profile = "continue.sav";
 		if (System.getProperties().getProperty("os.name").contains("Windows")) {
 			ftlSavePath = System.getProperties().getProperty("user.home") + "\\My Documents\\My Games\\FasterThanLight";
 		} else {
@@ -27,7 +25,8 @@ public class Config {
 	}
 
 	private Integer watchInterval;
-	private List<String> files = new ArrayList<>();
+	private String savefile;
+	private String profile;
 	private String ftlSavePath;
 
 	public static Config fromFile(String filename) {
