@@ -14,5 +14,5 @@ Once the program is running it automatically monitors the default save directory
 
 ![Preview](/images/preview.png)
 
-Check config.json for options in case the program does not work correctly, both the ftlSavePath and the ftlRunPath have to be properly set for it to work.
+A configuration file called *config.json* is created on first startup. Check it for options in case the program does not work correctly, both the ftlSavePath and the ftlRunPath have to be properly set for it to work.
 
