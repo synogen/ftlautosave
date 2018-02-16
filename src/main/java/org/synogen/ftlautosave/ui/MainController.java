@@ -3,6 +3,7 @@ package org.synogen.ftlautosave.ui;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import org.synogen.ftlautosave.App;
 import org.synogen.ftlautosave.BackupSave;
 import org.synogen.ftlautosave.Util;
@@ -22,7 +23,16 @@ public class MainController {
     private ListView<BackupSave> savesList;
 
     @FXML
+    private TextField savePath;
+
+    @FXML
+    private TextField runPath;
+
+    @FXML
     public void initialize() throws IOException {
+        savePath.setText(App.config.getFtlSavePath());
+        runPath.setText(App.config.getFtlRunPath());
+
         refreshSavesList(null);
     }
 
@@ -63,8 +73,12 @@ public class MainController {
         savesList.getItems().sort(Collections.reverseOrder(new SortBackupSaves()));
     }
 
-    private class SortBackupSaves implements Comparator<BackupSave> {
+    public void saveConfiguration() {
+        App.config.setFtlSavePath(savePath.getText());
+        App.config.setFtlRunPath(runPath.getText());
+    }
 
+    private class SortBackupSaves implements Comparator<BackupSave> {
         @Override
         public int compare(BackupSave o1, BackupSave o2) {
             return o1.getTimestamp().compareTo(o2.getTimestamp());

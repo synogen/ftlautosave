@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.synogen.ftlautosave.ui.MainController;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,30 +13,40 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class App extends Application {
+
+    private static final String CONFIG_FILE = "config.json";
+
     public static Config config;
 
     public static Logger log;
 
     public static void main( String[] args ) throws IOException {
+        //launch application
+        Application.launch(App.class, args);
+    }
+
+    private MainController mainController;
+
+    @Override
+    public void init() throws Exception {
         // init logger
         InputStream logConfig = App.class.getClassLoader().getResourceAsStream("logging.properties");
         LogManager.getLogManager().readConfiguration(logConfig);
         log = Logger.getLogger("ftlautosave");
 
         // load app configuration
-        config = Config.fromFile("config.json");
+        config = Config.fromFile(CONFIG_FILE);
         log.info("Using " + config.getFtlSavePath() + " as FTL save path");
 
         new FileWatch(config.getSavefile()).start();
         new FileWatch(config.getProfile()).start();
-
-        //launch UI
-        Application.launch(App.class, args);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(App.class.getClassLoader().getResource("main.fxml"));
+        FXMLLoader loader = new FXMLLoader(App.class.getClassLoader().getResource("main.fxml"));
+        Parent root = loader.load();
+        mainController = loader.getController();
 
         stage.setTitle("ftlautosave");
         stage.setScene(new Scene(root));
@@ -44,6 +55,8 @@ public class App extends Application {
 
     @Override
     public void stop() throws Exception {
+        mainController.saveConfiguration();
+        config.toFile(CONFIG_FILE);
         App.log.info("Exiting");
         System.exit(0);
     }
