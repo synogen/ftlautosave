@@ -2,10 +2,13 @@ package org.synogen.ftlautosave.ui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.shape.Circle;
 import org.synogen.ftlautosave.App;
 import org.synogen.ftlautosave.BackupSave;
+import org.synogen.ftlautosave.StatusMonitor;
 import org.synogen.ftlautosave.Util;
 
 import java.io.IOException;
@@ -29,11 +32,26 @@ public class MainController {
     private TextField runPath;
 
     @FXML
+    private Circle profileIndicator;
+    @FXML
+    private Circle saveIndicator;
+    @FXML
+    private Circle runPathIndicator;
+    @FXML
+    private Label profileStatus;
+    @FXML
+    private Label saveStatus;
+    @FXML
+    private Label runPathStatus;
+
+    @FXML
     public void initialize() throws IOException {
         savePath.setText(App.config.getFtlSavePath());
         runPath.setText(App.config.getFtlRunPath());
 
         refreshSavesList(null);
+
+        new StatusMonitor(profileIndicator, saveIndicator, runPathIndicator, profileStatus, saveStatus, runPathStatus).start();
     }
 
     @FXML
