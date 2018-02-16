@@ -40,24 +40,28 @@ public class MainController {
     public void refreshSavesList(ActionEvent event) throws IOException {
         savesList.getItems().clear();
         Path savePath = Paths.get(App.config.getFtlSavePath());
-        DirectoryStream<Path> savefiles = Files.newDirectoryStream(savePath, entry -> {
-            if (entry.getFileName().toString().startsWith(App.config.getSavefile() + ".")) {
-                return true;
-            }
-            return false;
-        });
-        DirectoryStream<Path> profiles = Files.newDirectoryStream(savePath, entry -> {
-            if (entry.getFileName().toString().startsWith(App.config.getProfile() + ".")) {
-                return true;
-            }
-            return false;
-        });
 
-        //convert iterators to list due to error message saying they have the same iterator when looping one iterator inside of the other
         List<Path> savefilesList = new ArrayList<Path>();
-        savefiles.forEach(savefilesList::add);
         List<Path> profilesList = new ArrayList<Path>();
-        profiles.forEach(profilesList::add);
+
+        if (Files.exists(savePath)) {
+            DirectoryStream<Path> savefiles = Files.newDirectoryStream(savePath, entry -> {
+                if (entry.getFileName().toString().startsWith(App.config.getSavefile() + ".")) {
+                    return true;
+                }
+                return false;
+            });
+            DirectoryStream<Path> profiles = Files.newDirectoryStream(savePath, entry -> {
+                if (entry.getFileName().toString().startsWith(App.config.getProfile() + ".")) {
+                    return true;
+                }
+                return false;
+            });
+
+            //convert iterators to list due to error message saying they have the same iterator when looping one iterator inside of the other
+            savefiles.forEach(savefilesList::add);
+            profiles.forEach(profilesList::add);
+        }
 
         for (Path savefile : savefilesList) {
             for (Path profile : profilesList) {
@@ -113,10 +117,12 @@ public class MainController {
     }
 
     @FXML
-    private void applyConfig(ActionEvent event) {
+    private void applyConfig(ActionEvent event) throws IOException {
         saveConfiguration();
 
         App.initWatchers();
+
+        refreshSavesList(event);
     }
 
 }
