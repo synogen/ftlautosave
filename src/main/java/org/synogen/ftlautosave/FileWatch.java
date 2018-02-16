@@ -1,5 +1,7 @@
 package org.synogen.ftlautosave;
 
+import lombok.Getter;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,6 +15,9 @@ public class FileWatch extends Thread {
 	public FileWatch(String filename) {
 		this.filename = filename;
 	}
+
+	@Getter
+	private boolean watching = false;
 
 	@Override
 	public void run() {
@@ -33,6 +38,9 @@ public class FileWatch extends Thread {
 			while (true) {
 				if (file.toFile().exists()) {
 					currentModification = file.toFile().lastModified();
+					watching = true;
+				} else {
+					watching = false;
 				}
 
 				try {
