@@ -39,6 +39,7 @@ public class Config {
 
 	public static Config fromFile(String filename) {
 		try {
+			App.log.info("Loading configuration");
 			ObjectMapper jackson = new ObjectMapper();
 			File configfile = Paths.get(filename).toFile();
 			if (!configfile.exists()) {
@@ -47,7 +48,20 @@ public class Config {
 
 			return jackson.readValue(configfile, Config.class);
 		} catch (IOException e) {
+			App.log.info("Could not load configuration, using defaults");
 			return new Config();
+		}
+	}
+
+	public void toFile(String filename) {
+		try {
+			App.log.info("Saving configuration");
+			ObjectMapper jackson = new ObjectMapper();
+			File configfile = Paths.get(filename).toFile();
+
+			jackson.writeValue(configfile, this);
+		} catch (IOException e) {
+			App.log.info("Could not write configuration");
 		}
 	}
 }
