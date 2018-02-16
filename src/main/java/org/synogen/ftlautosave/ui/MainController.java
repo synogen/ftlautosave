@@ -112,4 +112,11 @@ public class MainController {
                 .start();
     }
 
+    @FXML
+    private void applyConfig(ActionEvent event) {
+        saveConfiguration();
+
+        App.initWatchers();
+    }
+
 }

@@ -16,17 +16,21 @@ public class FileWatch extends Thread {
 
 	@Override
 	public void run() {
+		Path savePath = Paths.get(App.config.getFtlSavePath());
+
 		App.log.info("Watching " + filename);
 
-		Path savePath = Paths.get(App.config.getFtlSavePath());
-		
+		Path file = savePath.resolve(filename);
+
 		Long previousModification = 0l;
 		Long currentModification = 0l;
 
+		if (!file.toFile().exists()) {
+			App.log.info(filename + " not found, it will be watched as soon as it is created");
+		}
+
 		try {
 			while (true) {
-				Path file = savePath.resolve(filename);
-
 				if (file.toFile().exists()) {
 					currentModification = file.toFile().lastModified();
 				}

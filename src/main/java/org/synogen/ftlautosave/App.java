@@ -20,6 +20,10 @@ public class App extends Application {
 
     public static Logger log;
 
+    public static FileWatch saveWatcher;
+
+    public static FileWatch profileWatcher;
+
     public static void main( String[] args ) throws IOException {
         //launch application
         Application.launch(App.class, args);
@@ -36,10 +40,24 @@ public class App extends Application {
 
         // load app configuration
         config = Config.fromFile(CONFIG_FILE);
+
+        // start watching files
+        initWatchers();
+    }
+
+    public static void initWatchers() {
         log.info("Using " + config.getFtlSavePath() + " as FTL save path");
 
-        new FileWatch(config.getSavefile()).start();
-        new FileWatch(config.getProfile()).start();
+        if (saveWatcher != null) {
+            saveWatcher.interrupt();
+        }
+        if (profileWatcher != null) {
+            profileWatcher.interrupt();
+        }
+        saveWatcher = new FileWatch(config.getSavefile());
+        profileWatcher = new FileWatch(config.getProfile());
+        saveWatcher.start();
+        profileWatcher.start();
     }
 
     @Override
