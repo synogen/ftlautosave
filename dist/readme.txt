@@ -6,4 +6,5 @@ Put ftlautosave.jar into FTL's game folder and run it. ftlautosave.cmd is option
 
 # Configuration
 
-On first start config.json is created, right now it has to be edited manually to change configuration options.
+FTL's save folder and game folder can be configured directly in the UI.
+More advanced settings can be found in config.json which is created on first startup.
