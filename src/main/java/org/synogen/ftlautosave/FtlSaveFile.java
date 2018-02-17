@@ -68,10 +68,10 @@ public class FtlSaveFile {
             missiles = readInteger(channel);
             scrap = readInteger(channel);
 
+            channel.close();
         } catch (IOException e) {
             App.log.info("Unrecognized savegame format");
         }
-
     }
 
     /**
