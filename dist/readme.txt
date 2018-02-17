@@ -8,3 +8,7 @@ Put ftlautosave.jar into FTL's game folder and run it. ftlautosave.cmd is option
 
 FTL's save folder and game run path can be configured directly in the UI.
 More advanced settings can be found in ftlautosave.json which is created on first startup.
+
+# Other
+
+See https://github.com/synogen/ftlautosave for a more detailed description.
