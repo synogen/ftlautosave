@@ -11,6 +11,11 @@ import java.time.temporal.ChronoUnit;
 @Data
 public class BackupSave {
 
+    private Path savefile;
+    private Path profile;
+    private Instant timestamp;
+    private FtlSaveFile saveContent;
+
     public BackupSave(Path savefile, Path profile) {
         this.savefile = savefile;
         this.profile = profile;
@@ -20,16 +25,13 @@ public class BackupSave {
         Long milliseconds = Long.valueOf(filename.substring(split + 1));
         timestamp = Instant.ofEpochMilli(milliseconds);
 
+        saveContent = new FtlSaveFile(savefile);
     }
-
-    private Path savefile;
-    private Path profile;
-    private Instant timestamp;
 
     @Override
     public String toString() {
         Duration offset = Duration.of(ZonedDateTime.now().getOffset().getTotalSeconds(), ChronoUnit.SECONDS);
-        return timestamp.plus(offset).toString(); //TODO add more info (preferably from the save itself)
+        return timestamp.plus(offset).toString() + " " + saveContent.getShipname(); //TODO add more info (preferably from the save itself)
     }
 
 }

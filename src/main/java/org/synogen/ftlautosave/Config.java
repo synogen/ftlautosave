@@ -14,8 +14,8 @@ public class Config {
 	public Config() {
 		// defaults
 		this.watchInterval = 1000;
-		this.savefile = "ae_prof.sav";
-		this.profile = "continue.sav";
+		this.profile = "ae_prof.sav";
+		this.savefile = "continue.sav";
 		if (System.getProperties().getProperty("os.name").contains("Windows")) {
 			ftlSavePath = System.getProperties().getProperty("user.home") + "\\My Documents\\My Games\\FasterThanLight";
 		} else {
