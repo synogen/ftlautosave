@@ -9,12 +9,15 @@ import org.synogen.ftlautosave.ui.MainController;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.FileHandler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class App extends Application {
 
-    private static final String CONFIG_FILE = "config.json";
+    private static final String CONFIG_FILE = "ftlautosave.json";
+    private static final String LOG_FILE = "ftlautosave.log";
 
     public static Config config;
 
@@ -37,7 +40,9 @@ public class App extends Application {
         InputStream logConfig = App.class.getClassLoader().getResourceAsStream("logging.properties");
         LogManager.getLogManager().readConfiguration(logConfig);
         log = Logger.getLogger("ftlautosave");
-
+        FileHandler fileHandler = new FileHandler("ftlautosave.log");
+        fileHandler.setFormatter(new SimpleFormatter());
+        log.addHandler(fileHandler);
         // load app configuration
         config = Config.fromFile(CONFIG_FILE);
 
