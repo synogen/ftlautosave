@@ -3,10 +3,10 @@ package org.synogen.ftlautosave;
 import lombok.Data;
 
 import java.nio.file.Path;
-import java.time.Duration;
 import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 @Data
 public class BackupSave {
@@ -30,8 +30,29 @@ public class BackupSave {
 
     @Override
     public String toString() {
-        Duration offset = Duration.of(ZonedDateTime.now().getOffset().getTotalSeconds(), ChronoUnit.SECONDS);
-        return timestamp.plus(offset).toString() + " " + saveContent.getShipname(); //TODO add more info (preferably from the save itself)
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withZone(ZoneId.systemDefault());
+
+        return
+                formatter.format(timestamp) +
+                        "\n  " +
+                        "Ship " + saveContent.getShipname() +
+                        "\n    " +
+                        "Hull: " + saveContent.getHull() + "    " +
+                        "Fuel: " + saveContent.getFuel() + "    " +
+                        "Drone parts: " + saveContent.getDroneParts() + "    " +
+                        "Missiles: " + saveContent.getMissiles() + "    " +
+                        "Scrap: " + saveContent.getScrap() +
+                        "\n  " +
+                        "Stats" +
+                        "\n    " +
+                        "Total ships defeated: " + saveContent.getTotalShipsDefeated() + "\t\t" +
+                        "Total crew obtained: " + saveContent.getTotalCrewObtained() +
+                        "\n    " +
+                        "Total locations explored: " + saveContent.getTotalLocationsExplored() + "\t" +
+                        "Total scrap collected: " + saveContent.getTotalScrapCollected() +
+                        "\n-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -";
+
+
     }
 
 }
