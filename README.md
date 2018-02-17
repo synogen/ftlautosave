@@ -8,7 +8,7 @@ This allows you to restore a previous save-state and continue from there.
 
 ## Usage
 
-ftlautosave requires Java 8 or higher to run. Right now it has to be run directly in FTL's game folder and it has only been tested on Windows. Check the [releases](https://github.com/synogen/ftlautosave/releases) if you need a pre-compiled jar, further instructions on how to run the program are attached in a readme in the release-zip.
+ftlautosave requires Java 8 or higher to run. If run directly in FTL's game folder it should detect the executable to run FTL automatically, otherwise that has to be set manually. Check the [releases](https://github.com/synogen/ftlautosave/releases) if you need a pre-compiled jar, further instructions on how to run the program are attached in a readme in the release-zip.
 
 Once the program is running it automatically monitors the default save directory of FTL on Windows (\Users\\<user\>\My Documents\My Games\FasterThanLight). The UI shows all snapshots that have been created as timestamps, sorted by time in descending order. Right now this list is not automatically updated, you have to manually refresh it using the appropriate button. Restore a snapshot by selecting it, then clicking the appropriate button below.
 
@@ -17,3 +17,6 @@ Once the program is running it automatically monitors the default save directory
 FTL's save folder and game run path can be configured directly in the UI. Status indicators below show if the save file path and the run path have been configured correctly.
 More advanced settings can be found in ftlautosave.json which is created on first startup.
 
+## Issues
+
+ftlautosave has only been tested on Windows. Given that the save folder and FTL run path are set correctly it should work on other platforms. If you happen to test it on another platform and it doesn't work you can create an issue describing what went wrong and attach the ftlautosave.log if you like.
