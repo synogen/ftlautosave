@@ -10,6 +10,7 @@ import java.nio.ByteOrder;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 @Data
 public class FtlSaveFile {
@@ -35,7 +36,7 @@ public class FtlSaveFile {
         this.path = path;
 
         try {
-            SeekableByteChannel channel = Files.newByteChannel(path);
+            SeekableByteChannel channel = Files.newByteChannel(path, StandardOpenOption.READ);
 
             channel.position(12);
 
