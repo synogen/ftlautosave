@@ -14,6 +14,6 @@ Once the program is running it automatically monitors the default save directory
 
 ![Preview](/images/preview.png)
 
-FTL's save folder and game folder can be configured directly in the UI.
-More advanced settings can be found in config.json which is created on first startup.
+FTL's save folder and game run path can be configured directly in the UI. Status indicators below show if the save file path and the run path have been configured correctly.
+More advanced settings can be found in ftlautosave.json which is created on first startup.
 
