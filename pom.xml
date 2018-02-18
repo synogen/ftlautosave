@@ -85,8 +85,16 @@
                             <goal>copy</goal>
                         </goals>
                         <configuration>
-                            <sourceFile>target/ftlautosave-${project.version}-jar-with-dependencies.jar</sourceFile>
-                            <destinationFile>dist/ftlautosave.jar</destinationFile>
+                            <fileSets>
+                                <fileSet>
+                                    <sourceFile>target/ftlautosave-${project.version}-jar-with-dependencies.jar</sourceFile>
+                                    <destinationFile>dist/ftlautosave.jar</destinationFile>
+                                </fileSet>
+                                <fileSet>
+                                    <sourceFile>README.md</sourceFile>
+                                    <destinationFile>dist/README.md</destinationFile>
+                                </fileSet>
+                            </fileSets>
                         </configuration>
                     </execution>
                 </executions>
