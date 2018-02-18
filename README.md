@@ -20,3 +20,7 @@ More advanced settings can be found in ftlautosave.json which is created on firs
 ## Issues
 
 ftlautosave has only been tested on Windows. Given that the save folder and FTL run path are set correctly it should work on other platforms. If you happen to test it on another platform and it doesn't work you can create an issue describing what went wrong and attach the ftlautosave.log if you like.
+
+## Credits
+
+Program icon used created by [paomedia](https://www.iconfinder.com/paomedia) 
