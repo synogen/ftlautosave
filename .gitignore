@@ -1,7 +1,7 @@
 .idea
 target
+dist
 *.sav*
 ftlautosave.iml
-dist/ftlautosave.jar
 ftlautosave.json
 ftlautosave.log
