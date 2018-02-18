@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.synogen.ftlautosave.ui.MainController;
 
@@ -71,6 +72,7 @@ public class App extends Application {
         Parent root = loader.load();
         mainController = loader.getController();
 
+        stage.getIcons().add(new Image(App.class.getClassLoader().getResource("save-icon.png").toString()));
         stage.setTitle("ftlautosave");
         stage.setScene(new Scene(root));
         stage.show();
