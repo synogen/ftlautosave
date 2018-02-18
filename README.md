@@ -23,4 +23,4 @@ ftlautosave has only been tested on Windows. Given that the save folder and FTL 
 
 ## Credits
 
-Program icon used created by [paomedia](https://www.iconfinder.com/paomedia) 
+Program icon used created by [paomedia](https://www.iconfinder.com/paomedia) under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)
