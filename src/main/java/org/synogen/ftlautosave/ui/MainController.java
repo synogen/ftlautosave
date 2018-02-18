@@ -2,6 +2,7 @@ package org.synogen.ftlautosave.ui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -43,11 +44,14 @@ public class MainController {
     private Label saveStatus;
     @FXML
     private Label runPathStatus;
+    @FXML
+    private CheckBox autoStartFtl;
 
     @FXML
     public void initialize() throws IOException {
         savePath.setText(App.config.getFtlSavePath());
         runPath.setText(App.config.getFtlRunPath());
+        autoStartFtl.setSelected(App.config.getAutoStartFtl());
 
         refreshSavesList(null);
 
@@ -98,6 +102,7 @@ public class MainController {
     public void saveConfiguration() {
         App.config.setFtlSavePath(savePath.getText());
         App.config.setFtlRunPath(runPath.getText());
+        App.config.setAutoStartFtl(autoStartFtl.isSelected());
     }
 
     private class SortBackupSaves implements Comparator<BackupSave> {
@@ -124,14 +129,7 @@ public class MainController {
     private void restoreAndStartFtl(ActionEvent event) throws IOException {
         restoreSave(event);
 
-        App.log.info("Starting FTL");
-        Path ftlRunPath = Paths.get(App.config.getFtlRunPath());
-        Path ftlWorkingDirectory = ftlRunPath.getParent();
-
-        new ProcessBuilder()
-                .directory(ftlWorkingDirectory.toFile())
-                .command(ftlRunPath.toString())
-                .start();
+        startFtl();
     }
 
     @FXML
@@ -143,4 +141,14 @@ public class MainController {
         refreshSavesList(event);
     }
 
+    public void startFtl() throws IOException {
+        App.log.info("Starting FTL");
+        Path ftlRunPath = Paths.get(App.config.getFtlRunPath());
+        Path ftlWorkingDirectory = ftlRunPath.getParent();
+
+        new ProcessBuilder()
+                .directory(ftlWorkingDirectory.toFile())
+                .command(ftlRunPath.toString())
+                .start();
+    }
 }

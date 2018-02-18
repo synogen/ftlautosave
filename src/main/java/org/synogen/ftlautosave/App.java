@@ -74,6 +74,10 @@ public class App extends Application {
         stage.setTitle("ftlautosave");
         stage.setScene(new Scene(root));
         stage.show();
+
+        if (App.config.getAutoStartFtl()) {
+            mainController.startFtl();
+        }
     }
 
     @Override

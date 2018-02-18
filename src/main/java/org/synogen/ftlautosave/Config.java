@@ -28,6 +28,7 @@ public class Config {
         } else {
 			this.ftlRunPath = "FTLGame.exe";
 		}
+		this.autoStartFtl = false;
 
 	}
 
@@ -36,6 +37,7 @@ public class Config {
 	private String profile;
 	private String ftlSavePath;
 	private String ftlRunPath;
+	private Boolean autoStartFtl;
 
 	public static Config fromFile(String filename) {
 		try {
