@@ -12,7 +12,7 @@ ftlautosave requires Java 8 or higher to run. You can either start ftlautosave.j
 
 ## Usage
 
-Once the program is running it automatically monitors the default save directory of FTL on Windows (\Users\\<user\>\My Documents\My Games\FasterThanLight). The UI shows all snapshots that have been created as timestamps, sorted by time in descending order. Right now this list is not automatically updated, you have to manually refresh it using the appropriate button. Restore a snapshot by selecting it, then clicking the appropriate button below.
+Once the program is running it automatically monitors the default save directory of FTL on Windows (\Users\\<user\>\My Documents\My Games\FasterThanLight). The UI shows all save snapshots that have been created as timestamps, sorted by time in descending order. Right now this list is not automatically updated, you have to manually refresh it using the appropriate button. Restore a snapshot by selecting it, then clicking the appropriate button below. Usually you won't need to quit FTL to restore a snapshot, just go to the game's main menu, switch to ftlautosave, restore the snapshot you'd like then switch back to FTL and continue.
 
 ![Preview](/images/preview.png)
 
