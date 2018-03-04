@@ -18,6 +18,14 @@ public class FtlSaveFile {
     @Getter(AccessLevel.NONE)
     private Path path;
 
+    private final Integer MAX_READ_BUFFER = 2048;
+
+    private final Integer MAX_SKIP_TIMES = 256;
+
+    private boolean invalidFile = false;
+
+    private Integer version;
+
     private Integer totalShipsDefeated;
     private Integer totalLocationsExplored;
     private Integer totalScrapCollected;
@@ -37,6 +45,8 @@ public class FtlSaveFile {
 
         try {
             SeekableByteChannel channel = Files.newByteChannel(path, StandardOpenOption.READ);
+
+            version = readInteger(channel);
 
             channel.position(12);
 
@@ -71,7 +81,10 @@ public class FtlSaveFile {
 
             channel.close();
         } catch (IOException e) {
-            App.log.info("Unrecognized savegame format");
+            App.log.info("Could not read savegame due to I/O exception");
+        } catch (FTlSaveFormatInvalid fTlSaveFormatInvalid) {
+            invalidFile = true;
+            App.log.info(path.getFileName().toString() + " appears to contain an unsupported save format");
         }
     }
 
@@ -81,8 +94,11 @@ public class FtlSaveFile {
      * @param structure
      * @throws IOException
      */
-    private void skipVariableStructures(SeekableByteChannel channel, String structure) throws IOException {
+    private void skipVariableStructures(SeekableByteChannel channel, String structure) throws IOException, FTlSaveFormatInvalid {
         Integer times = readInteger(channel);
+        if (times <= 0 || times > MAX_SKIP_TIMES) {
+            throw new FTlSaveFormatInvalid();
+        }
         skipStructureTimes(channel, structure, times);
     }
 
@@ -92,7 +108,7 @@ public class FtlSaveFile {
      * @param structure structure string using 'i' for integer and 's' for string, so "iss" would read one integer and two variable length strings
      * @throws IOException
      */
-    private void skipStructure(SeekableByteChannel channel, String structure) throws IOException {
+    private void skipStructure(SeekableByteChannel channel, String structure) throws IOException, FTlSaveFormatInvalid {
         char[] struct = structure.toCharArray();
         for (int i = 0; i < struct.length; i++) {
             switch (struct[i]) {
@@ -109,7 +125,7 @@ public class FtlSaveFile {
      * @param times
      * @throws IOException
      */
-    private void skipStructureTimes(SeekableByteChannel channel, String structure, Integer times) throws IOException {
+    private void skipStructureTimes(SeekableByteChannel channel, String structure, Integer times) throws IOException, FTlSaveFormatInvalid {
         for (int i = 0; i < times; i++) {
             skipStructure(channel, structure);
         }
@@ -134,8 +150,11 @@ public class FtlSaveFile {
      * @return
      * @throws IOException
      */
-    private String readNextString(SeekableByteChannel channel) throws IOException {
+    private String readNextString(SeekableByteChannel channel) throws IOException, FTlSaveFormatInvalid {
         Integer length = readInteger(channel);
+        if (length <= 0 || length> MAX_READ_BUFFER) {
+            throw new FTlSaveFormatInvalid();
+        }
         ByteBuffer buffer = ByteBuffer.allocate(length);
         channel.read(buffer);
         return new String(buffer.array());
