@@ -49,6 +49,7 @@ public class FtlSaveFile {
                         "(missiles)i" +
                         "(scrap)i"));
     }
+
     private boolean invalidFile = false;
 
     private Integer version;
@@ -75,7 +76,17 @@ public class FtlSaveFile {
             version = readInteger(channel);
             channel.close();
 
-            FtlMapping mapping = SUPPORTED_VERSIONS.get(version);
+            FtlMapping mapping = SUPPORTED_VERSIONS.get(version);;
+            if (!SUPPORTED_VERSIONS.containsKey(version)) {
+                int distance = Integer.MAX_VALUE;
+                for (Integer supported : SUPPORTED_VERSIONS.keySet()) {
+                    if (Math.abs(supported - version) < distance) {
+                        distance = Math.abs(supported - version);
+                        mapping = SUPPORTED_VERSIONS.get(supported);
+                    }
+                }
+            }
+
             mapping.parse(path);
 
             totalShipsDefeated = mapping.getInteger("totalShipsDefeated");
