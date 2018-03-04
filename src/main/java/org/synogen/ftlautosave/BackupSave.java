@@ -31,27 +31,29 @@ public class BackupSave {
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withZone(ZoneId.systemDefault());
-
-        return
-                formatter.format(timestamp) +
-                        "\n  " +
-                        "Ship " + saveContent.getShipname() +
+        return formatter.format(timestamp) + " Save format version " + saveContent.getVersion() +
+                (
+                        saveContent.isInvalidFile() ?
                         "\n    " +
-                        "Hull: " + saveContent.getHull() + "    " +
-                        "Fuel: " + saveContent.getFuel() + "    " +
-                        "Drone parts: " + saveContent.getDroneParts() + "    " +
-                        "Missiles: " + saveContent.getMissiles() + "    " +
-                        "Scrap: " + saveContent.getScrap() +
-                        "\n  " +
-                        "Stats" +
-                        "\n    " +
-                        "Total ships defeated: " + saveContent.getTotalShipsDefeated() + "\t\t" +
-                        "Total crew obtained: " + saveContent.getTotalCrewObtained() +
-                        "\n    " +
-                        "Total locations explored: " + saveContent.getTotalLocationsExplored() + "\t" +
-                        "Total scrap collected: " + saveContent.getTotalScrapCollected() +
-                        "\n-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -";
-
+                        "! File could not be fully read, values might be missing or wrong !" : ""
+                ) +
+                "\n  " +
+                "Ship " + saveContent.getShipname() +
+                "\n    " +
+                "Hull: " + saveContent.getHull() + "    " +
+                "Fuel: " + saveContent.getFuel() + "    " +
+                "Drone parts: " + saveContent.getDroneParts() + "    " +
+                "Missiles: " + saveContent.getMissiles() + "    " +
+                "Scrap: " + saveContent.getScrap() +
+                "\n  " +
+                "Stats" +
+                "\n    " +
+                "Total ships defeated: " + saveContent.getTotalShipsDefeated() + "\t\t" +
+                "Total crew obtained: " + saveContent.getTotalCrewObtained() +
+                "\n    " +
+                "Total locations explored: " + saveContent.getTotalLocationsExplored() + "\t" +
+                "Total scrap collected: " + saveContent.getTotalScrapCollected() +
+                "\n-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -";
 
     }
 
