@@ -42,6 +42,8 @@ public class FtlMapping {
         channel.position(startAt);
 
         parseStructure(channel, structure);
+
+        channel.close();
     }
 
     private void parseStructure(SeekableByteChannel channel, String structure) throws IOException, FTlSaveFormatInvalid {
