@@ -1,4 +1,4 @@
-package org.synogen.ftlautosave;
+package org.synogen.ftlautosave.save;
 
 import lombok.Data;
 

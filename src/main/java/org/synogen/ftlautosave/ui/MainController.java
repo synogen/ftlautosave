@@ -8,7 +8,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.shape.Circle;
 import org.synogen.ftlautosave.App;
-import org.synogen.ftlautosave.BackupSave;
+import org.synogen.ftlautosave.save.BackupSave;
 import org.synogen.ftlautosave.StatusMonitor;
 import org.synogen.ftlautosave.Util;
 

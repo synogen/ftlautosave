@@ -1,4 +1,4 @@
-package org.synogen.ftlautosave;
+package org.synogen.ftlautosave.save;
 
 public class FTlSaveFormatInvalid extends Throwable {
 

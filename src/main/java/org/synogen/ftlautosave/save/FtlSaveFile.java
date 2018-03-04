@@ -1,8 +1,9 @@
-package org.synogen.ftlautosave;
+package org.synogen.ftlautosave.save;
 
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
+import org.synogen.ftlautosave.App;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -11,7 +12,6 @@ import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 @Data
@@ -73,7 +73,7 @@ public class FtlSaveFile {
 
         try {
             SeekableByteChannel channel = Files.newByteChannel(path, StandardOpenOption.READ);
-            version = readInteger(channel);
+            version = FtlMapping.readInteger(channel);
             channel.close();
 
             FtlMapping mapping = SUPPORTED_VERSIONS.get(version);;
@@ -110,21 +110,6 @@ public class FtlSaveFile {
             invalidFile = true;
             App.log.info(path.getFileName().toString() + " appears to contain an unsupported save format");
         }
-    }
-
-
-
-    /**
-     * Reads a single four byte integer
-     * @param channel
-     * @return
-     * @throws IOException
-     */
-    private Integer readInteger(SeekableByteChannel channel) throws IOException {
-        ByteBuffer intValue = ByteBuffer.allocate(4);
-        intValue.order(ByteOrder.LITTLE_ENDIAN);
-        channel.read(intValue);
-        return intValue.getInt(0);
     }
 
 }

@@ -1,4 +1,4 @@
-package org.synogen.ftlautosave;
+package org.synogen.ftlautosave.save;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -122,7 +122,7 @@ public class FtlMapping {
      * @return
      * @throws IOException
      */
-    private Integer readInteger(SeekableByteChannel channel) throws IOException {
+    protected static Integer readInteger(SeekableByteChannel channel) throws IOException {
         ByteBuffer intValue = ByteBuffer.allocate(4);
         intValue.order(ByteOrder.LITTLE_ENDIAN);
         channel.read(intValue);
