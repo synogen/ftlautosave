@@ -11,6 +11,8 @@ import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @Data
 public class FtlSaveFile {
@@ -18,10 +20,35 @@ public class FtlSaveFile {
     @Getter(AccessLevel.NONE)
     private Path path;
 
-    private final Integer MAX_READ_BUFFER = 2048;
-
-    private final Integer MAX_SKIP_TIMES = 256;
-
+    private final HashMap<Integer, FtlMapping> SUPPORTED_VERSIONS = new HashMap<>();
+    {
+        SUPPORTED_VERSIONS.put(9, new FtlMapping(12,
+                "(totalShipsDefeated)i" +
+                        "(totalLocationsExplored)i" +
+                        "(totalScrapCollected)i" +
+                        "(totalCrewObtained)i" +
+                        "(shipname)s" +
+                        "(shiptype)s" +
+                        "ii[xsi]sss[xss]iiii" +
+                        "(hull)i" +
+                        "(fuel)i" +
+                        "(droneParts)i" +
+                        "(missiles)i" +
+                        "(scrap)i"));
+        SUPPORTED_VERSIONS.put(11, new FtlMapping(16,
+                "(totalShipsDefeated)i" +
+                        "(totalLocationsExplored)i" +
+                        "(totalScrapCollected)i" +
+                        "(totalCrewObtained)i" +
+                        "(shipname)s" +
+                        "(shiptype)s" +
+                        "ii[xsi]sss[xss]iiii" +
+                        "(hull)i" +
+                        "(fuel)i" +
+                        "(droneParts)i" +
+                        "(missiles)i" +
+                        "(scrap)i"));
+    }
     private boolean invalidFile = false;
 
     private Integer version;
@@ -45,41 +72,27 @@ public class FtlSaveFile {
 
         try {
             SeekableByteChannel channel = Files.newByteChannel(path, StandardOpenOption.READ);
-
             version = readInteger(channel);
+            channel.close();
 
-            channel.position(12);
+            FtlMapping mapping = SUPPORTED_VERSIONS.get(version);
+            mapping.parse(path);
 
-            totalShipsDefeated = readInteger(channel);
-            totalLocationsExplored = readInteger(channel);
-            totalScrapCollected = readInteger(channel);
-            totalCrewObtained = readInteger(channel);
+            totalShipsDefeated = mapping.getInteger("totalShipsDefeated");
+            totalLocationsExplored = mapping.getInteger("totalLocationsExplored");
+            totalScrapCollected = mapping.getInteger("totalScrapCollected");
+            totalCrewObtained = mapping.getInteger("totalCrewObtained");
 
-            shipname = readNextString(channel);
-            shiptype = readNextString(channel);
-
-            skipStructure(channel, "ii");
-
-            // state vars
-            skipVariableStructures(channel, "si");
-
-            // ship details
-            skipStructure(channel,"sss");
-
-            // start crew?
-            skipVariableStructures(channel, "ss");
-
-            // ??
-            skipStructure(channel,"iiii");
+            shipname = mapping.getString("shipname");
+            shiptype = mapping.getString("shiptype");
 
             // ship values
-            hull = readInteger(channel);
-            fuel = readInteger(channel);
-            droneParts = readInteger(channel);
-            missiles = readInteger(channel);
-            scrap = readInteger(channel);
+            hull = mapping.getInteger("hull");
+            fuel = mapping.getInteger("fuel");
+            droneParts = mapping.getInteger("droneParts");
+            missiles = mapping.getInteger("missiles");
+            scrap = mapping.getInteger("scrap");
 
-            channel.close();
         } catch (IOException e) {
             App.log.info("Could not read savegame due to I/O exception");
         } catch (FTlSaveFormatInvalid fTlSaveFormatInvalid) {
@@ -88,48 +101,7 @@ public class FtlSaveFile {
         }
     }
 
-    /**
-     * Reads the structure count first and then skips over that structure that many times
-     * @param channel
-     * @param structure
-     * @throws IOException
-     */
-    private void skipVariableStructures(SeekableByteChannel channel, String structure) throws IOException, FTlSaveFormatInvalid {
-        Integer times = readInteger(channel);
-        if (times <= 0 || times > MAX_SKIP_TIMES) {
-            throw new FTlSaveFormatInvalid();
-        }
-        skipStructureTimes(channel, structure, times);
-    }
 
-    /**
-     * Skips over a structure
-     * @param channel
-     * @param structure structure string using 'i' for integer and 's' for string, so "iss" would read one integer and two variable length strings
-     * @throws IOException
-     */
-    private void skipStructure(SeekableByteChannel channel, String structure) throws IOException, FTlSaveFormatInvalid {
-        char[] struct = structure.toCharArray();
-        for (int i = 0; i < struct.length; i++) {
-            switch (struct[i]) {
-                case 's': readNextString(channel); break;
-                case 'i': readInteger(channel); break;
-            }
-        }
-    }
-
-    /**
-     * Skips a given structure times 'times'
-     * @param channel
-     * @param structure
-     * @param times
-     * @throws IOException
-     */
-    private void skipStructureTimes(SeekableByteChannel channel, String structure, Integer times) throws IOException, FTlSaveFormatInvalid {
-        for (int i = 0; i < times; i++) {
-            skipStructure(channel, structure);
-        }
-    }
 
     /**
      * Reads a single four byte integer
@@ -142,22 +114,6 @@ public class FtlSaveFile {
         intValue.order(ByteOrder.LITTLE_ENDIAN);
         channel.read(intValue);
         return intValue.getInt(0);
-    }
-
-    /**
-     * Reads a variable length string by reading the length in the first four bytes, then reading length * bytes for the string value
-     * @param channel
-     * @return
-     * @throws IOException
-     */
-    private String readNextString(SeekableByteChannel channel) throws IOException, FTlSaveFormatInvalid {
-        Integer length = readInteger(channel);
-        if (length <= 0 || length> MAX_READ_BUFFER) {
-            throw new FTlSaveFormatInvalid();
-        }
-        ByteBuffer buffer = ByteBuffer.allocate(length);
-        channel.read(buffer);
-        return new String(buffer.array());
     }
 
 }
