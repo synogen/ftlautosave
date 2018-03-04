@@ -127,7 +127,7 @@ public class MainController {
 
     @FXML
     private void restoreAndStartFtl(ActionEvent event) throws IOException {
-        restoreSave(event);
+//        restoreSave(event);
 
         startFtl();
     }
@@ -149,6 +149,7 @@ public class MainController {
         new ProcessBuilder()
                 .directory(ftlWorkingDirectory.toFile())
                 .command(ftlRunPath.toString())
+                .inheritIO()
                 .start();
     }
 }
