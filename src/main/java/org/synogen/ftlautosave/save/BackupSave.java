@@ -1,7 +1,11 @@
 package org.synogen.ftlautosave.save;
 
 import lombok.Data;
+import org.synogen.ftlautosave.App;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -57,4 +61,25 @@ public class BackupSave {
 
     }
 
+    public void deleteFiles() {
+        try {
+            String filename = this.savefile.toString();
+            Files.delete(this.savefile);
+            App.log.info("Deleted " + filename);
+        } catch (FileNotFoundException e) {
+            // OK
+        } catch (IOException e) {
+            App.log.info("Could not delete " + this.savefile.toString());
+        }
+
+        try {
+            String filename = this.profile.toString();
+            Files.delete(this.profile);
+            App.log.info("Deleted " + filename);
+        } catch (FileNotFoundException e) {
+            // OK
+        } catch (IOException e) {
+            App.log.info("Could not delete " + this.profile.toString());
+        }
+    }
 }

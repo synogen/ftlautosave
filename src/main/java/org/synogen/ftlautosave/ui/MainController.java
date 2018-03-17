@@ -43,7 +43,12 @@ public class MainController {
     private Label runPathStatus;
     @FXML
     private CheckBox autoStartFtl;
+    @FXML
+    private CheckBox autoUpdateSnapshots;
+    @FXML
+    private CheckBox limitBackupSaves;
 
+    private StatusMonitor statusMonitor;
     private DirectoryWatch directoryWatch;
 
     @FXML
@@ -51,10 +56,25 @@ public class MainController {
         savePath.setText(App.config.getFtlSavePath());
         runPath.setText(App.config.getFtlRunPath());
         autoStartFtl.setSelected(App.config.getAutoStartFtl());
+        autoUpdateSnapshots.setSelected(App.config.getAutoUpdateSnapshots());
+        limitBackupSaves.setSelected(App.config.getLimitBackupSaves());
 
-        new StatusMonitor(profileIndicator, saveIndicator, runPathIndicator, profileStatus, saveStatus, runPathStatus).start();
+        resetUIWatchers();
+    }
+
+    public void resetUIWatchers() {
+        if (statusMonitor != null && statusMonitor.isAlive()) {
+            statusMonitor.interrupt();
+        }
+        if (directoryWatch != null && directoryWatch.isAlive()) {
+            directoryWatch.interrupt();
+        }
+        statusMonitor = new StatusMonitor(profileIndicator, saveIndicator, runPathIndicator, profileStatus, saveStatus, runPathStatus);
+        statusMonitor.start();
         directoryWatch = new DirectoryWatch(Paths.get(App.config.getFtlSavePath()), savesList);
-        directoryWatch.start();
+        if (App.config.getAutoUpdateSnapshots()) {
+            directoryWatch.start();
+        }
     }
 
     @FXML
@@ -66,6 +86,8 @@ public class MainController {
         App.config.setFtlSavePath(savePath.getText());
         App.config.setFtlRunPath(runPath.getText());
         App.config.setAutoStartFtl(autoStartFtl.isSelected());
+        App.config.setAutoUpdateSnapshots(autoUpdateSnapshots.isSelected());
+        App.config.setLimitBackupSaves(limitBackupSaves.isSelected());
     }
 
     @FXML
@@ -94,7 +116,7 @@ public class MainController {
 
         App.initWatchers();
 
-        refreshSavesList(event);
+        resetUIWatchers();
     }
 
     public void startFtl() throws IOException {

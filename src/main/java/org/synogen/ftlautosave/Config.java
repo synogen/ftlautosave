@@ -29,7 +29,8 @@ public class Config {
 			this.ftlRunPath = "FTLGame.exe";
 		}
 		this.autoStartFtl = false;
-
+		this.autoUpdateSnapshots = true;
+		this.limitBackupSaves = true;
 	}
 
 	private Integer watchInterval;
@@ -38,6 +39,8 @@ public class Config {
 	private String ftlSavePath;
 	private String ftlRunPath;
 	private Boolean autoStartFtl;
+	private Boolean autoUpdateSnapshots;
+	private Boolean limitBackupSaves;
 
 	public static Config fromFile(String filename) {
 		try {

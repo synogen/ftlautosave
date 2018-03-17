@@ -31,6 +31,7 @@ public class DirectoryWatch extends Thread {
 
     @Override
     public void run() {
+        App.log.info("Snapshot list updater starting");
 
         while (true) {
             try {
@@ -38,7 +39,7 @@ public class DirectoryWatch extends Thread {
 
                 sleep(3000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                App.log.info("Snapshot list updater exiting");
             }
         }
     }
@@ -87,6 +88,16 @@ public class DirectoryWatch extends Thread {
             }
         }
         saves.sort(Collections.reverseOrder(new Util.SortBackupSaves()));
+
+        if (App.config.getLimitBackupSaves() && saves.size() > 500) {
+            App.log.info("500 save snapshots exceeded, deleting oldest files");
+            List<BackupSave> purgeList = saves.subList(500, saves.size() - 1);
+            for (BackupSave save : purgeList) {
+                save.deleteFiles();
+            }
+            purgeList.clear();
+        }
+
         Platform.runLater(() -> {
             savesList.getItems().clear();
             savesList.getItems().addAll(saves);

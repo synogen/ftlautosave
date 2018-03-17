@@ -7,6 +7,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -16,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<VBox fx:id="mainBox" prefHeight="667.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.synogen.ftlautosave.ui.MainController">
+<VBox fx:id="mainBox" prefHeight="730.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.synogen.ftlautosave.ui.MainController">
   <children>
       <TitledPane animated="false" collapsible="false" prefHeight="415.0" prefWidth="500.0" text="Snapshots">
          <content>
@@ -44,7 +45,7 @@
       </TitledPane>
       <TitledPane animated="false" collapsible="false" prefHeight="0.0" prefWidth="500.0" text="Configuration">
          <content>
-            <GridPane hgap="5.0" minHeight="130.0" prefHeight="130.0" vgap="10.0">
+            <GridPane hgap="5.0" minHeight="195.0" prefHeight="195.0" vgap="10.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="237.0" minWidth="10.0" prefWidth="135.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="361.0" minWidth="10.0" prefWidth="350.0" />
@@ -54,14 +55,22 @@
                 <RowConstraints maxHeight="20.0" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <TextField fx:id="savePath" prefHeight="25.0" prefWidth="358.0" GridPane.columnIndex="1" />
                   <TextField fx:id="runPath" layoutX="177.0" layoutY="8.0" prefHeight="25.0" prefWidth="349.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="FTL save path" />
                   <Label text="FTL run command" GridPane.rowIndex="1" />
-                  <Button fx:id="apply" mnemonicParsing="false" onAction="#applyConfig" text="Apply configuration" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                  <CheckBox fx:id="autoStartFtl" mnemonicParsing="false" text="Automatically start FTL when ftlautosave is started" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Button fx:id="apply" mnemonicParsing="false" onAction="#applyConfig" text="Apply configuration" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+                  <CheckBox fx:id="autoStartFtl" mnemonicParsing="false" text="Automatically start FTL when ftlautosave is started" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                  <CheckBox fx:id="limitBackupSaves" mnemonicParsing="false" text="Delete obsolete backup saves when refreshing the snapshot list" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                     <tooltip>
+                        <Tooltip text="Keeps only the newest 500 saves when refreshing, useful if refreshing the snapshot list takes a long time" />
+                     </tooltip>
+                  </CheckBox>
+                  <CheckBox fx:id="autoUpdateSnapshots" mnemonicParsing="false" text="Automatically refresh snapshot list" GridPane.columnSpan="2" GridPane.rowIndex="3" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
