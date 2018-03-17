@@ -68,13 +68,13 @@ public class MainController {
 
         if (Files.exists(savePath)) {
             DirectoryStream<Path> savefiles = Files.newDirectoryStream(savePath, entry -> {
-                if (entry.getFileName().toString().startsWith(App.config.getSavefile() + ".")) {
+                if (entry.getFileName().toString().startsWith(App.config.getSavefile() + ".") && entry.getFileName().toString().matches(".*\\d+$")) {
                     return true;
                 }
                 return false;
             });
             DirectoryStream<Path> profiles = Files.newDirectoryStream(savePath, entry -> {
-                if (entry.getFileName().toString().startsWith(App.config.getProfile() + ".")) {
+                if (entry.getFileName().toString().startsWith(App.config.getProfile() + ".") && entry.getFileName().toString().matches(".*\\d+$")) {
                     return true;
                 }
                 return false;
