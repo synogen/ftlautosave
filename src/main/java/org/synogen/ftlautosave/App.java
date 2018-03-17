@@ -41,7 +41,7 @@ public class App extends Application {
         InputStream logConfig = App.class.getClassLoader().getResourceAsStream("logging.properties");
         LogManager.getLogManager().readConfiguration(logConfig);
         log = Logger.getLogger("ftlautosave");
-        FileHandler fileHandler = new FileHandler("ftlautosave.log");
+        FileHandler fileHandler = new FileHandler(LOG_FILE);
         fileHandler.setFormatter(new SimpleFormatter());
         log.addHandler(fileHandler);
         // load app configuration
