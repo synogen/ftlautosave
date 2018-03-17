@@ -2,6 +2,7 @@ package org.synogen.ftlautosave;
 
 import javafx.application.Platform;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TitledPane;
 import org.synogen.ftlautosave.save.BackupSave;
 
 import java.io.IOException;
@@ -22,10 +23,13 @@ public class DirectoryWatch extends Thread {
 
     private Path savePath;
     private ListView<BackupSave> savesList;
+    private TitledPane title;
 
-    public DirectoryWatch(Path savePath, ListView<BackupSave> savesList) {
+    public DirectoryWatch(Path savePath, ListView<BackupSave> savesList, TitledPane title) {
         this.savePath = savePath;
         this.savesList = savesList;
+        this.title = title;
+
         this.setPriority(Thread.MIN_PRIORITY);
     }
 
@@ -91,7 +95,7 @@ public class DirectoryWatch extends Thread {
 
         if (App.config.getLimitBackupSaves() && saves.size() > 500) {
             App.log.info("500 save snapshots exceeded, deleting oldest files");
-            List<BackupSave> purgeList = saves.subList(500, saves.size() - 1);
+            List<BackupSave> purgeList = saves.subList(500 - 1, saves.size() - 1);
             for (BackupSave save : purgeList) {
                 save.deleteFiles();
             }
@@ -101,6 +105,7 @@ public class DirectoryWatch extends Thread {
         Platform.runLater(() -> {
             savesList.getItems().clear();
             savesList.getItems().addAll(saves);
+            title.setText("Snapshots (" + savesList.getItems().size() + ")");
         });
     }
 }

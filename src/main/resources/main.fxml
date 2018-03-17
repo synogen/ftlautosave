@@ -19,7 +19,7 @@
 
 <VBox fx:id="mainBox" prefHeight="730.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.synogen.ftlautosave.ui.MainController">
   <children>
-      <TitledPane animated="false" collapsible="false" prefHeight="415.0" prefWidth="500.0" text="Snapshots">
+      <TitledPane fx:id="snapshotsTitle" animated="false" collapsible="false" prefHeight="415.0" prefWidth="500.0" text="Snapshots">
          <content>
             <BorderPane prefHeight="720.0" prefWidth="498.0">
                <center>

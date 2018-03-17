@@ -2,10 +2,7 @@ package org.synogen.ftlautosave.ui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.shape.Circle;
 import org.synogen.ftlautosave.App;
 import org.synogen.ftlautosave.DirectoryWatch;
@@ -47,6 +44,9 @@ public class MainController {
     private CheckBox autoUpdateSnapshots;
     @FXML
     private CheckBox limitBackupSaves;
+    @FXML
+    private TitledPane snapshotsTitle;
+
 
     private StatusMonitor statusMonitor;
     private DirectoryWatch directoryWatch;
@@ -71,7 +71,7 @@ public class MainController {
         }
         statusMonitor = new StatusMonitor(profileIndicator, saveIndicator, runPathIndicator, profileStatus, saveStatus, runPathStatus);
         statusMonitor.start();
-        directoryWatch = new DirectoryWatch(Paths.get(App.config.getFtlSavePath()), savesList);
+        directoryWatch = new DirectoryWatch(Paths.get(App.config.getFtlSavePath()), savesList, snapshotsTitle);
         if (App.config.getAutoUpdateSnapshots()) {
             directoryWatch.start();
         }
