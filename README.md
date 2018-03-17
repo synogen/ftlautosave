@@ -12,13 +12,14 @@ ftlautosave requires Java 8 or higher to run. You can either start ftlautosave.j
 
 ## Usage
 
-Once the program is running it automatically monitors the default save directory of FTL on Windows (\Users\\<user\>\My Documents\My Games\FasterThanLight). The UI shows all save snapshots that have been created as timestamps, sorted by time in descending order. Right now this list is not automatically updated, you have to manually refresh it using the appropriate button. Restore a snapshot by selecting it, then clicking the appropriate button below. Usually you won't need to quit FTL to restore a snapshot, just go to the game's main menu, switch to ftlautosave, restore the snapshot you'd like then switch back to FTL and continue.
+Once the program is running it automatically monitors the default save directory of FTL on Windows (\Users\\<user\>\My Documents\My Games\FasterThanLight). The UI shows all save snapshots that have been created with some basic info about the save and a timestamp, sorted by time in descending order. Restore a snapshot by selecting it, then clicking the appropriate button below. Usually you won't need to quit FTL to restore a snapshot, just go to the game's main menu, switch to ftlautosave, restore the snapshot you'd like then switch back to FTL and continue.
 
 ![Preview](/images/preview.png)
 
 FTL's save folder and game run path can be configured directly in the UI. Status indicators below show if the save file path and the run path have been configured correctly.
-More advanced settings can be found in ftlautosave.json which is created on first startup.
-
+To streamline playing FTL with ftlautosave you can choose to start FTL automatically when ftlautosave is launched. That way you only need to start one program and you can be sure your saves are being monitored.
+The snapshot list is updated automatically by default. There is also a default limit of 500 snapshots after which the program will start deleting the oldest snapshots, this is to prevent getting too many old save files in the save directory and the program getting sluggish when refreshing all of them.
+You can of course override the default configuration if you wish to retain all save files or if you want to manage the old save files by yourself. 
 ## Download
 
 Check the [releases](https://github.com/synogen/ftlautosave/releases) if you need a pre-compiled jar.
