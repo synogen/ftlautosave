@@ -10,10 +10,7 @@ import org.synogen.ftlautosave.ui.MainController;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.FileHandler;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+import java.util.logging.*;
 
 public class App extends Application {
 
@@ -46,6 +43,10 @@ public class App extends Application {
         log.addHandler(fileHandler);
         // load app configuration
         config = Config.fromFile(CONFIG_FILE);
+
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            log.log(Level.SEVERE, e.getMessage(), e);
+        });
 
         // start watching files
         initWatchers();
