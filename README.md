@@ -8,7 +8,7 @@ This allows you to restore a previous save-state and continue from there.
 
 ## Run
 
-ftlautosave requires Java 8 or higher to run. You can either start ftlautosave.jar directly or use the supplied ftlautosave.cmd file (Windows only). If run directly in FTL's game folder it should detect the executable to run FTL automatically, otherwise that has to be set manually.
+ftlautosave requires [Java Runtime Environment 8](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html) or higher to run. You can either start ftlautosave.jar directly or use the supplied ftlautosave.cmd file (Windows only). If run directly in FTL's game folder it should detect the executable to run FTL automatically, otherwise that has to be set manually.
 
 ## Usage
 
