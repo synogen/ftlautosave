@@ -25,11 +25,6 @@ public class App extends Application {
 
     public static FileWatch profileWatcher;
 
-    public static void main( String[] args ) throws IOException {
-        //launch application
-        Application.launch(App.class, args);
-    }
-
     private MainController mainController;
 
     @Override
