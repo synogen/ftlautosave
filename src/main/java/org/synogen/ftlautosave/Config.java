@@ -11,14 +11,31 @@ import java.nio.file.Paths;
 @Data
 public class Config {
 
+	/**
+	 * Credits: https://mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/
+	 */
+	private static String OS = System.getProperty("os.name").toLowerCase();
+	private static String UHOME = System.getProperties().getProperty("user.home");
+	public static boolean IS_WINDOWS = (OS.indexOf("win") >= 0);
+	public static boolean IS_MAC = (OS.indexOf("mac") >= 0);
+	public static boolean IS_UNIX = (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0);
+	public static boolean IS_SOLARIS = (OS.indexOf("sunos") >= 0);
+
 	public Config() {
 		// defaults
 		this.watchInterval = 1000;
 		this.profile = "ae_prof.sav";
 		this.savefile = "continue.sav";
-		if (System.getProperties().getProperty("os.name").contains("Windows")) {
-			ftlSavePath = System.getProperties().getProperty("user.home") + "\\My Documents\\My Games\\FasterThanLight";
-		} else {
+		if (IS_WINDOWS) {
+			ftlSavePath = UHOME + "\\My Documents\\My Games\\FasterThanLight";
+		}
+		else if(IS_MAC){
+			ftlSavePath = UHOME + "/Library/Application Support/FasterThanLight";
+		}
+		else if(IS_UNIX){
+			ftlSavePath = UHOME + "/.local/share/FasterThanLight";
+		}
+		else {
 			// TODO detect FTL save path for other operating systems
 			ftlSavePath = "";
 		}

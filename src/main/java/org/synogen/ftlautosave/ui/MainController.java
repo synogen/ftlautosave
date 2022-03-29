@@ -50,6 +50,7 @@ public class MainController {
 
     private StatusMonitor statusMonitor;
     private DirectoryWatch directoryWatch;
+    private String fileSep;
 
     @FXML
     public void initialize() {
@@ -58,6 +59,7 @@ public class MainController {
         autoStartFtl.setSelected(App.config.getAutoStartFtl());
         autoUpdateSnapshots.setSelected(App.config.getAutoUpdateSnapshots());
         limitBackupSaves.setSelected(App.config.getLimitBackupSaves());
+        fileSep = System.getProperty("file.separator");
 
         resetUIWatchers();
     }
@@ -94,8 +96,8 @@ public class MainController {
     private void restoreSave(ActionEvent event) throws IOException {
         BackupSave save = savesList.getSelectionModel().getSelectedItem();
         if (save != null) {
-            Path savefile = Paths.get(App.config.getFtlSavePath() + "\\" + App.config.getSavefile());
-            Path profile = Paths.get(App.config.getFtlSavePath() + "\\" + App.config.getProfile());
+            Path savefile = Paths.get(App.config.getFtlSavePath() + fileSep + App.config.getSavefile());
+            Path profile = Paths.get(App.config.getFtlSavePath() + fileSep + App.config.getProfile());
             App.log.info("Copying " + save.getSavefile().toString() + " to " + savefile.toString());
             Files.copy(save.getSavefile(), savefile, StandardCopyOption.REPLACE_EXISTING);
             App.log.info("Copying " + save.getProfile().toString() + " to " + profile.toString());
