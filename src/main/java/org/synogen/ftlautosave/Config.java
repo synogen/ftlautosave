@@ -48,6 +48,7 @@ public class Config {
 		this.autoStartFtl = false;
 		this.autoUpdateSnapshots = true;
 		this.limitBackupSaves = true;
+		this.maxNrOfBackupSaves = 500;
 	}
 
 	private Integer watchInterval;
@@ -58,6 +59,7 @@ public class Config {
 	private Boolean autoStartFtl;
 	private Boolean autoUpdateSnapshots;
 	private Boolean limitBackupSaves;
+	private Integer maxNrOfBackupSaves;
 
 	public static Config fromFile(String filename) {
 		try {
