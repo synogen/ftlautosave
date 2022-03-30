@@ -8,7 +8,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.synogen.ftlautosave.ui.MainController;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.*;
 
