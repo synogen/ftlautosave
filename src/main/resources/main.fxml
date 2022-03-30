@@ -67,20 +67,22 @@
                <children>
                   <TextField fx:id="savePath" prefHeight="25.0" prefWidth="358.0" GridPane.columnIndex="1" />
                   <TextField fx:id="runPath" layoutX="177.0" layoutY="8.0" prefHeight="25.0" prefWidth="349.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="maxNrOfBackupSaves" layoutX="177.0" layoutY="8.0" prefHeight="25.0" prefWidth="349.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Label text="FTL save path" />
                   <Label text="FTL run command" GridPane.rowIndex="1" />
-                  <CheckBox fx:id="autoStartFtl" mnemonicParsing="false" text="Automatically start FTL when ftlautosave is started" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                  <CheckBox fx:id="autoUpdateSnapshots" mnemonicParsing="false" text="Automatically refresh snapshot list" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                  <Label text="Max number of saves" GridPane.rowIndex="2" />
+                  <CheckBox fx:id="autoStartFtl" mnemonicParsing="false" text="Automatically start FTL when ftlautosave is started" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                  <CheckBox fx:id="autoUpdateSnapshots" mnemonicParsing="false" text="Automatically refresh snapshot list" GridPane.columnSpan="2" GridPane.rowIndex="4">
                      <tooltip>
                         <Tooltip text="Refreshes the snapshot list every 3 seconds" />
                      </tooltip>
                   </CheckBox>
-                  <CheckBox fx:id="limitBackupSaves" mnemonicParsing="false" text="Delete obsolete backup saves when refreshing the snapshot list" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                  <CheckBox fx:id="limitBackupSaves" mnemonicParsing="false" text="Delete obsolete backup saves when refreshing the snapshot list" GridPane.columnSpan="2" GridPane.rowIndex="5">
                      <tooltip>
                         <Tooltip text="Keeps only the newest 500 saves when refreshing, useful if refreshing the snapshot list takes a long time" />
                      </tooltip>
                   </CheckBox>
-                  <Button fx:id="apply" mnemonicParsing="false" onAction="#applyConfig" text="Apply configuration" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
+                  <Button fx:id="apply" mnemonicParsing="false" onAction="#applyConfig" text="Apply configuration" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
