@@ -1,5 +1,7 @@
 package org.synogen.ftlautosave.ui;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -46,6 +48,8 @@ public class MainController {
     private CheckBox limitBackupSaves;
     @FXML
     private TitledPane snapshotsTitle;
+    @FXML
+    private TextField maxNrOfBackupSaves;
 
 
     private StatusMonitor statusMonitor;
@@ -59,7 +63,20 @@ public class MainController {
         autoStartFtl.setSelected(App.config.getAutoStartFtl());
         autoUpdateSnapshots.setSelected(App.config.getAutoUpdateSnapshots());
         limitBackupSaves.setSelected(App.config.getLimitBackupSaves());
+        maxNrOfBackupSaves.setText(App.config.getMaxNrOfBackupSaves().toString());
         fileSep = System.getProperty("file.separator");
+
+        // force the checkMaxNrOfBackupSaves field to be numeric only and have 4 digits max
+        maxNrOfBackupSaves.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    newValue = newValue.replaceAll("[^\\d]", "");
+                }
+                newValue = newValue.length() > 4 ? newValue.substring(0, 4) : newValue;
+                maxNrOfBackupSaves.setText(newValue);
+            }
+        });
 
         resetUIWatchers();
     }
@@ -90,6 +107,20 @@ public class MainController {
         App.config.setAutoStartFtl(autoStartFtl.isSelected());
         App.config.setAutoUpdateSnapshots(autoUpdateSnapshots.isSelected());
         App.config.setLimitBackupSaves(limitBackupSaves.isSelected());
+        App.config.setMaxNrOfBackupSaves(checkMaxNrOfBackupSaves(maxNrOfBackupSaves.getText()));
+    }
+
+    // do not accept empty values or (accidental?) values below 10 which may delete too many saves
+    private Integer checkMaxNrOfBackupSaves(String newValue)
+    {
+        if(newValue == null || newValue.isEmpty()){
+            return 10;
+        }
+        Integer newIntVal = Integer.parseInt(newValue);
+        newIntVal = newIntVal < 10 ? 10 : newIntVal;
+        // also update value in GUI to inform user
+        maxNrOfBackupSaves.setText(newIntVal.toString());
+        return newIntVal;
     }
 
     @FXML
