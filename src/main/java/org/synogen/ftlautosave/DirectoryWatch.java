@@ -37,13 +37,13 @@ public class DirectoryWatch extends Thread {
     public void run() {
         App.log.info("Snapshot list updater starting");
 
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
                 refreshSaves();
-
                 sleep(3000);
             } catch (InterruptedException e) {
                 App.log.info("Snapshot list updater exiting");
+                Thread.currentThread().interrupt();
             }
         }
     }
