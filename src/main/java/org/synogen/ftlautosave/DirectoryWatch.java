@@ -93,9 +93,9 @@ public class DirectoryWatch extends Thread {
         }
         saves.sort(Collections.reverseOrder(new Util.SortBackupSaves()));
 
-        if (App.config.getLimitBackupSaves() && saves.size() > 500) {
-            App.log.info("500 save snapshots exceeded, deleting oldest files");
-            List<BackupSave> purgeList = saves.subList(500 - 1, saves.size() - 1);
+        if (App.config.getLimitBackupSaves() && saves.size() > App.config.getMaxNrOfBackupSaves()) {
+            App.log.info(App.config.getMaxNrOfBackupSaves() + " save snapshots exceeded, deleting oldest files");
+            List<BackupSave> purgeList = saves.subList(App.config.getMaxNrOfBackupSaves() - 1, saves.size() - 1);
             for (BackupSave save : purgeList) {
                 save.deleteFiles();
             }
@@ -105,7 +105,7 @@ public class DirectoryWatch extends Thread {
         Platform.runLater(() -> {
             savesList.getItems().clear();
             savesList.getItems().addAll(saves);
-            title.setText("Snapshots (" + savesList.getItems().size() + ")");
+            title.setText("FTL save snapshots (" + savesList.getItems().size() + ")");
         });
     }
 }
