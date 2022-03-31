@@ -19,7 +19,7 @@
 
 <VBox fx:id="mainBox" prefHeight="730.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.synogen.ftlautosave.ui.MainController">
   <children>
-      <TitledPane fx:id="snapshotsTitle" animated="false" collapsible="false" prefHeight="415.0" prefWidth="500.0" text="Snapshots">
+      <TitledPane fx:id="snapshotsTitle" animated="false" collapsible="false" prefHeight="415.0" prefWidth="500.0" text="FTL save snapshots">
          <content>
             <BorderPane prefHeight="720.0" prefWidth="498.0">
                <center>
@@ -33,13 +33,16 @@
                      <children>
                         <Button fx:id="refresh" mnemonicParsing="false" onAction="#refreshSavesList" text="Refresh list">
                            <tooltip>
-                              <Tooltip text="Refresh the snapshot list manually" />
+                              <Tooltip text="Refresh the save snapshot list manually" />
                            </tooltip></Button>
                         <Button fx:id="restore" mnemonicParsing="false" onAction="#restoreSave" text="Restore selected save">
                            <tooltip>
-                              <Tooltip text="Restore the currently selected snapshot so FTL can load it" />
+                              <Tooltip text="Restore the currently selected save snapshot so FTL can load it" />
                            </tooltip></Button>
-                        <Button fx:id="restoreAndStart" mnemonicParsing="false" onAction="#restoreAndStartFtl" text="Restore selected save and start FTL" />
+                        <Button fx:id="restoreAndStart" mnemonicParsing="false" onAction="#restoreAndStartFtl" text="Restore selected save and start FTL">
+                         <tooltip>
+                             <Tooltip text="Restore the currently selected save snapshot so FTL can load it followed by starting FTL" />
+                         </tooltip></Button>
                      </children>
                      <BorderPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -71,15 +74,19 @@
                   <Label text="FTL save path" />
                   <Label text="FTL run command" GridPane.rowIndex="1" />
                   <Label text="Max number of saves" GridPane.rowIndex="2" />
-                  <CheckBox fx:id="autoStartFtl" mnemonicParsing="false" text="Automatically start FTL when ftlautosave is started" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-                  <CheckBox fx:id="autoUpdateSnapshots" mnemonicParsing="false" text="Automatically refresh snapshot list" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                  <CheckBox fx:id="autoStartFtl" mnemonicParsing="false" text="Automatically start FTL when ftlautosave is started" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                      <tooltip>
+                          <Tooltip text="When ftlautosave is started also attempt to automatically start the FTL executable" />
+                      </tooltip>
+                  </CheckBox>
+                  <CheckBox fx:id="autoUpdateSnapshots" mnemonicParsing="false" text="Automatically refresh save snapshot list" GridPane.columnSpan="2" GridPane.rowIndex="4">
                      <tooltip>
-                        <Tooltip text="Refreshes the snapshot list every 3 seconds" />
+                        <Tooltip text="Automatically refreshes the save snapshot list every 3 seconds" />
                      </tooltip>
                   </CheckBox>
-                  <CheckBox fx:id="limitBackupSaves" mnemonicParsing="false" text="Delete obsolete backup saves when refreshing the snapshot list" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                  <CheckBox fx:id="limitBackupSaves" mnemonicParsing="false" text="Delete oldest saves when refreshing snapshot list" GridPane.columnSpan="2" GridPane.rowIndex="5">
                      <tooltip>
-                        <Tooltip text="Keeps only the newest 500 saves when refreshing, useful if refreshing the snapshot list takes a long time" />
+                        <Tooltip text="Keep only the newest saves when refreshing the snapshot list, limited by the maximum number of saves, useful if refreshing the list takes a long time" />
                      </tooltip>
                   </CheckBox>
                   <Button fx:id="apply" mnemonicParsing="false" onAction="#applyConfig" text="Apply configuration" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
