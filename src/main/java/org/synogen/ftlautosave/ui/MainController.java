@@ -137,6 +137,19 @@ public class MainController {
     }
 
     @FXML
+    private void markSaveAndRefresh(ActionEvent event) throws IOException {
+        BackupSave save = savesList.getSelectionModel().getSelectedItem();
+        if (save != null) {
+            if(directoryWatch.markedSaves.contains(save.getTimestamp())){
+                directoryWatch.markedSaves.remove(save.getTimestamp());
+            }else{
+                directoryWatch.markedSaves.add(save.getTimestamp());
+            }
+        }
+        directoryWatch.refreshSaves();
+    }
+
+    @FXML
     private void restoreAndStartFtl(ActionEvent event) throws IOException {
         restoreSave(event);
 

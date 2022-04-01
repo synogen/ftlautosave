@@ -35,11 +35,15 @@
                            <tooltip>
                               <Tooltip text="Refresh the save snapshot list manually" />
                            </tooltip></Button>
+                        <Button fx:id="markSaveAndRefresh" mnemonicParsing="false" onAction="#markSaveAndRefresh" text="Mark &amp; refresh">
+                             <tooltip>
+                                 <Tooltip text="Mark the selected save with a highlight color and refresh the save snapshot list" />
+                             </tooltip></Button>
                         <Button fx:id="restore" mnemonicParsing="false" onAction="#restoreSave" text="Restore selected save">
                            <tooltip>
                               <Tooltip text="Restore the currently selected save snapshot so FTL can load it" />
                            </tooltip></Button>
-                        <Button fx:id="restoreAndStart" mnemonicParsing="false" onAction="#restoreAndStartFtl" text="Restore selected save and start FTL">
+                        <Button fx:id="restoreAndStart" mnemonicParsing="false" onAction="#restoreAndStartFtl" text="Restore save &amp; start FTL">
                          <tooltip>
                              <Tooltip text="Restore the currently selected save snapshot so FTL can load it followed by starting FTL" />
                          </tooltip></Button>

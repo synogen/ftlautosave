@@ -1,6 +1,7 @@
 package org.synogen.ftlautosave;
 
 import javafx.application.Platform;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 import org.synogen.ftlautosave.save.BackupSave;
@@ -14,6 +15,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -24,11 +26,13 @@ public class DirectoryWatch extends Thread {
     private Path savePath;
     private ListView<BackupSave> savesList;
     private TitledPane title;
+    public HashSet<Instant> markedSaves;
 
     public DirectoryWatch(Path savePath, ListView<BackupSave> savesList, TitledPane title) {
         this.savePath = savePath;
         this.savesList = savesList;
         this.title = title;
+        this.markedSaves = new HashSet<>();
 
         this.setPriority(Thread.MIN_PRIORITY);
     }
@@ -105,6 +109,22 @@ public class DirectoryWatch extends Thread {
         Platform.runLater(() -> {
             savesList.getItems().clear();
             savesList.getItems().addAll(saves);
+            savesList.setCellFactory(param -> new ListCell<BackupSave>() {
+                @Override
+                protected void updateItem(BackupSave item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setStyle(null);
+                    } else if(markedSaves.contains(item.getTimestamp())) {
+                        setText(item.toString());
+                        setStyle("-fx-accent: #0099CE; -fx-control-inner-background: #FFFF00;");
+                    }else{
+                        setText(item.toString());
+                        setStyle(null);
+                    }
+                }
+            });
             title.setText("FTL save snapshots (" + savesList.getItems().size() + ")");
         });
     }
