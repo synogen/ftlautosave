@@ -93,6 +93,8 @@ public class MainController {
         directoryWatch = new DirectoryWatch(Paths.get(App.config.getFtlSavePath()), savesList, snapshotsTitle);
         if (App.config.getAutoUpdateSnapshots()) {
             directoryWatch.start();
+        }else{
+            directoryWatch.refreshSaves();
         }
     }
 
