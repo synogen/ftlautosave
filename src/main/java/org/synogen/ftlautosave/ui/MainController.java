@@ -16,6 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Instant;
+import java.util.HashSet;
 
 public class MainController {
 
@@ -90,7 +92,13 @@ public class MainController {
         }
         statusMonitor = new StatusMonitor(profileIndicator, saveIndicator, runPathIndicator, profileStatus, saveStatus, runPathStatus);
         statusMonitor.start();
-        directoryWatch = new DirectoryWatch(Paths.get(App.config.getFtlSavePath()), savesList, snapshotsTitle);
+        if(directoryWatch != null)
+        {
+            directoryWatch = new DirectoryWatch(Paths.get(App.config.getFtlSavePath()), directoryWatch.markedSaves, savesList, snapshotsTitle);
+        }
+        else{
+            directoryWatch = new DirectoryWatch(Paths.get(App.config.getFtlSavePath()), savesList, snapshotsTitle);
+        }
         if (App.config.getAutoUpdateSnapshots()) {
             directoryWatch.start();
         }else{

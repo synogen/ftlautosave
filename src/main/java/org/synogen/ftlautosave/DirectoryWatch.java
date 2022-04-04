@@ -37,6 +37,11 @@ public class DirectoryWatch extends Thread {
         this.setPriority(Thread.MIN_PRIORITY);
     }
 
+    public DirectoryWatch(Path savePath, HashSet<Instant> markedSaves, ListView<BackupSave> savesList, TitledPane title) {
+        this(savePath, savesList, title);
+        this.markedSaves = markedSaves;
+    }
+
     @Override
     public void run() {
         App.log.info("Snapshot list updater starting");
