@@ -118,7 +118,9 @@ public class DirectoryWatch extends Thread {
                         setStyle(null);
                     } else if(markedSaves.contains(item.getTimestamp())) {
                         setText(item.toString());
-                        setStyle("-fx-accent: #0099CE; -fx-control-inner-background: #FFFF00;");
+                        // default accent is 0099CE, selected FFFF00, blended to midpoint 80CC67
+                        // so user knows that a marked save is selected
+                        setStyle("-fx-accent: #80CC67; -fx-control-inner-background: #FFFF00;");
                     }else{
                         setText(item.toString());
                         setStyle(null);
