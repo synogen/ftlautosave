@@ -1,5 +1,7 @@
 package org.synogen.ftlautosave.ui;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -14,6 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Instant;
+import java.util.HashSet;
 
 public class MainController {
 
@@ -45,11 +49,16 @@ public class MainController {
     @FXML
     private CheckBox limitBackupSaves;
     @FXML
+    private CheckBox strictSaveParsing;
+    @FXML
     private TitledPane snapshotsTitle;
+    @FXML
+    private TextField maxNrOfBackupSaves;
 
 
     private StatusMonitor statusMonitor;
     private DirectoryWatch directoryWatch;
+    private String fileSep;
 
     @FXML
     public void initialize() {
@@ -58,6 +67,21 @@ public class MainController {
         autoStartFtl.setSelected(App.config.getAutoStartFtl());
         autoUpdateSnapshots.setSelected(App.config.getAutoUpdateSnapshots());
         limitBackupSaves.setSelected(App.config.getLimitBackupSaves());
+        strictSaveParsing.setSelected(App.config.getStrictSaveParsing());
+        maxNrOfBackupSaves.setText(App.config.getMaxNrOfBackupSaves().toString());
+        fileSep = System.getProperty("file.separator");
+
+        // force the checkMaxNrOfBackupSaves field to be numeric only and have 4 digits max
+        maxNrOfBackupSaves.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    newValue = newValue.replaceAll("[^\\d]", "");
+                }
+                newValue = newValue.length() > 4 ? newValue.substring(0, 4) : newValue;
+                maxNrOfBackupSaves.setText(newValue);
+            }
+        });
 
         resetUIWatchers();
     }
@@ -71,9 +95,17 @@ public class MainController {
         }
         statusMonitor = new StatusMonitor(profileIndicator, saveIndicator, runPathIndicator, profileStatus, saveStatus, runPathStatus);
         statusMonitor.start();
-        directoryWatch = new DirectoryWatch(Paths.get(App.config.getFtlSavePath()), savesList, snapshotsTitle);
+        if(directoryWatch != null)
+        {
+            directoryWatch = new DirectoryWatch(Paths.get(App.config.getFtlSavePath()), directoryWatch.markedSaves, savesList, snapshotsTitle);
+        }
+        else{
+            directoryWatch = new DirectoryWatch(Paths.get(App.config.getFtlSavePath()), savesList, snapshotsTitle);
+        }
         if (App.config.getAutoUpdateSnapshots()) {
             directoryWatch.start();
+        }else{
+            directoryWatch.refreshSaves();
         }
     }
 
@@ -88,19 +120,47 @@ public class MainController {
         App.config.setAutoStartFtl(autoStartFtl.isSelected());
         App.config.setAutoUpdateSnapshots(autoUpdateSnapshots.isSelected());
         App.config.setLimitBackupSaves(limitBackupSaves.isSelected());
+        App.config.setStrictSaveParsing(strictSaveParsing.isSelected());
+        App.config.setMaxNrOfBackupSaves(checkMaxNrOfBackupSaves(maxNrOfBackupSaves.getText()));
+    }
+
+    // do not accept empty values or (accidental?) values below 10 which may delete too many saves
+    private Integer checkMaxNrOfBackupSaves(String newValue)
+    {
+        if(newValue == null || newValue.isEmpty()){
+            return 10;
+        }
+        Integer newIntVal = Integer.parseInt(newValue);
+        newIntVal = newIntVal < 10 ? 10 : newIntVal;
+        // also update value in GUI to inform user
+        maxNrOfBackupSaves.setText(newIntVal.toString());
+        return newIntVal;
     }
 
     @FXML
     private void restoreSave(ActionEvent event) throws IOException {
         BackupSave save = savesList.getSelectionModel().getSelectedItem();
         if (save != null) {
-            Path savefile = Paths.get(App.config.getFtlSavePath() + "\\" + App.config.getSavefile());
-            Path profile = Paths.get(App.config.getFtlSavePath() + "\\" + App.config.getProfile());
+            Path savefile = Paths.get(App.config.getFtlSavePath() + fileSep + App.config.getSavefile());
+            Path profile = Paths.get(App.config.getFtlSavePath() + fileSep + App.config.getProfile());
             App.log.info("Copying " + save.getSavefile().toString() + " to " + savefile.toString());
             Files.copy(save.getSavefile(), savefile, StandardCopyOption.REPLACE_EXISTING);
             App.log.info("Copying " + save.getProfile().toString() + " to " + profile.toString());
             Files.copy(save.getProfile(), profile, StandardCopyOption.REPLACE_EXISTING);
         }
+    }
+
+    @FXML
+    private void markSaveAndRefresh(ActionEvent event) throws IOException {
+        BackupSave save = savesList.getSelectionModel().getSelectedItem();
+        if (save != null) {
+            if(directoryWatch.markedSaves.contains(save.getTimestamp())){
+                directoryWatch.markedSaves.remove(save.getTimestamp());
+            }else{
+                directoryWatch.markedSaves.add(save.getTimestamp());
+            }
+        }
+        directoryWatch.refreshSaves();
     }
 
     @FXML

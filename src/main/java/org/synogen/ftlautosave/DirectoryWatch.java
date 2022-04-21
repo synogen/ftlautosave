@@ -1,6 +1,7 @@
 package org.synogen.ftlautosave;
 
 import javafx.application.Platform;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 import org.synogen.ftlautosave.save.BackupSave;
@@ -14,6 +15,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -24,26 +26,33 @@ public class DirectoryWatch extends Thread {
     private Path savePath;
     private ListView<BackupSave> savesList;
     private TitledPane title;
+    public HashSet<Instant> markedSaves;
 
     public DirectoryWatch(Path savePath, ListView<BackupSave> savesList, TitledPane title) {
         this.savePath = savePath;
         this.savesList = savesList;
         this.title = title;
+        this.markedSaves = new HashSet<>();
 
         this.setPriority(Thread.MIN_PRIORITY);
+    }
+
+    public DirectoryWatch(Path savePath, HashSet<Instant> markedSaves, ListView<BackupSave> savesList, TitledPane title) {
+        this(savePath, savesList, title);
+        this.markedSaves = markedSaves;
     }
 
     @Override
     public void run() {
         App.log.info("Snapshot list updater starting");
 
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
                 refreshSaves();
-
                 sleep(3000);
             } catch (InterruptedException e) {
                 App.log.info("Snapshot list updater exiting");
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -93,9 +102,9 @@ public class DirectoryWatch extends Thread {
         }
         saves.sort(Collections.reverseOrder(new Util.SortBackupSaves()));
 
-        if (App.config.getLimitBackupSaves() && saves.size() > 500) {
-            App.log.info("500 save snapshots exceeded, deleting oldest files");
-            List<BackupSave> purgeList = saves.subList(500 - 1, saves.size() - 1);
+        if (App.config.getLimitBackupSaves() && saves.size() > App.config.getMaxNrOfBackupSaves()) {
+            App.log.info(App.config.getMaxNrOfBackupSaves() + " save snapshots exceeded, deleting oldest files");
+            List<BackupSave> purgeList = saves.subList(App.config.getMaxNrOfBackupSaves() - 1, saves.size() - 1);
             for (BackupSave save : purgeList) {
                 save.deleteFiles();
             }
@@ -105,7 +114,25 @@ public class DirectoryWatch extends Thread {
         Platform.runLater(() -> {
             savesList.getItems().clear();
             savesList.getItems().addAll(saves);
-            title.setText("Snapshots (" + savesList.getItems().size() + ")");
+            savesList.setCellFactory(param -> new ListCell<BackupSave>() {
+                @Override
+                protected void updateItem(BackupSave item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setStyle(null);
+                    } else if(markedSaves.contains(item.getTimestamp())) {
+                        setText(item.toString());
+                        // default accent is 0099CE, selected FFFF00, blended to midpoint 80CC67
+                        // so user knows that a marked save is selected
+                        setStyle("-fx-accent: #80CC67; -fx-control-inner-background: #FFFF00;");
+                    }else{
+                        setText(item.toString());
+                        setStyle(null);
+                    }
+                }
+            });
+            title.setText("FTL save snapshots (" + savesList.getItems().size() + ")");
         });
     }
 }

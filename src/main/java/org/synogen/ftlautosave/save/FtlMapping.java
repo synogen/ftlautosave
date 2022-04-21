@@ -1,5 +1,7 @@
 package org.synogen.ftlautosave.save;
 
+import org.synogen.ftlautosave.App;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -84,9 +86,13 @@ public class FtlMapping {
     private void skipVariableStructures(SeekableByteChannel channel, String structure) throws IOException, FTlSaveFormatInvalid {
         Integer times = readInteger(channel);
         if (times < 0 || times > MAX_SKIP_TIMES) {
-            throw new FTlSaveFormatInvalid(channel.position() - 4, times);
+            if(App.config.getStrictSaveParsing()) {
+                throw new FTlSaveFormatInvalid(channel.position() - 4, times);
+            }
         }
-        skipStructureTimes(channel, structure, times);
+        else{
+            skipStructureTimes(channel, structure, times);
+        }
     }
 
     /**
@@ -140,7 +146,11 @@ public class FtlMapping {
     private String readNextString(SeekableByteChannel channel) throws IOException, FTlSaveFormatInvalid {
         Integer length = readInteger(channel);
         if (length <= 0 || length> MAX_READ_BUFFER) {
-            throw new FTlSaveFormatInvalid(channel.position() - 4, length);
+            if(App.config.getStrictSaveParsing()) {
+                throw new FTlSaveFormatInvalid(channel.position() - 4, length);
+            }else{
+                return null;
+            }
         }
         ByteBuffer buffer = ByteBuffer.allocate(length);
         channel.read(buffer);
