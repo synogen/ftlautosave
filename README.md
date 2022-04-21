@@ -39,7 +39,11 @@ Check the [releases](https://github.com/synogen/ftlautosave/releases) if you nee
 
 ## Issues
 
-ftlautosave has been tested on Windows and Mac. Given that the save folder and FTL run path are set correctly it should work on other platforms. If you happen to test it on another platform and it doesn't work you can create an issue describing what went wrong and attach the ftlautosave.log if you like.
+ftlautosave has been tested on Windows and Mac.
+Given that the save folder and FTL run path are set correctly it should work on other platforms.
+If you happen to test it on another platform and it doesn't work you can create an issue describing what went wrong and attach the ftlautosave.log if you like.
+In principle, ftlautosave does not support save file formats from modded FTL installations such as Multiverse.
+However, using the option to disable the original strict parsing of FTL save format, potential violations from mod saves may be ignored to show as much information as possible.
 
 ## Credits
 
