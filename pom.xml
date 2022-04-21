@@ -3,8 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!--
-    Run ftlautosave program:    mvn javafx:run
-    Package into runnable JAR:  mvn package
+    Package into runnable JAR with all dependencies: run Maven target 'package' (mvn package)
+    Run ftlautosave within your IDE: build and run org.synogen.ftlautosave.Main
+        (note: mvn javafx:run doesn't seem to work anymore since cross-OS dependencies/packaging)
     -->
 
     <groupId>org.synogen</groupId>
@@ -73,7 +74,7 @@
 
     <build>
         <plugins>
-            <plugin>
+            <plugin> <!-- this plugin could be removed probably -->
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>${javafx.maven.plugin.version}</version>

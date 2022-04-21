@@ -49,6 +49,8 @@ public class MainController {
     @FXML
     private CheckBox limitBackupSaves;
     @FXML
+    private CheckBox strictSaveParsing;
+    @FXML
     private TitledPane snapshotsTitle;
     @FXML
     private TextField maxNrOfBackupSaves;
@@ -65,6 +67,7 @@ public class MainController {
         autoStartFtl.setSelected(App.config.getAutoStartFtl());
         autoUpdateSnapshots.setSelected(App.config.getAutoUpdateSnapshots());
         limitBackupSaves.setSelected(App.config.getLimitBackupSaves());
+        strictSaveParsing.setSelected(App.config.getStrictSaveParsing());
         maxNrOfBackupSaves.setText(App.config.getMaxNrOfBackupSaves().toString());
         fileSep = System.getProperty("file.separator");
 
@@ -117,6 +120,7 @@ public class MainController {
         App.config.setAutoStartFtl(autoStartFtl.isSelected());
         App.config.setAutoUpdateSnapshots(autoUpdateSnapshots.isSelected());
         App.config.setLimitBackupSaves(limitBackupSaves.isSelected());
+        App.config.setStrictSaveParsing(strictSaveParsing.isSelected());
         App.config.setMaxNrOfBackupSaves(checkMaxNrOfBackupSaves(maxNrOfBackupSaves.getText()));
     }
 

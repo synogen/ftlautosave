@@ -63,6 +63,7 @@ public class Config {
 		this.autoStartFtl = false;
 		this.autoUpdateSnapshots = true;
 		this.limitBackupSaves = true;
+		this.strictSaveParsing = false;
 		this.maxNrOfBackupSaves = 500;
 	}
 
@@ -74,6 +75,7 @@ public class Config {
 	private Boolean autoStartFtl;
 	private Boolean autoUpdateSnapshots;
 	private Boolean limitBackupSaves;
+	private Boolean strictSaveParsing;
 	private Integer maxNrOfBackupSaves;
 
 	public static Config fromFile(String filename) throws Exception {

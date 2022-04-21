@@ -93,7 +93,12 @@
                         <Tooltip text="Keep only the newest saves when refreshing the snapshot list, limited by the maximum number of saves, useful if refreshing the list takes a long time" />
                      </tooltip>
                   </CheckBox>
-                  <Button fx:id="apply" mnemonicParsing="false" onAction="#applyConfig" text="Apply configuration" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+                  <CheckBox fx:id="strictSaveParsing" mnemonicParsing="false" text="Enable original strict parsing of FTL save format" GridPane.columnSpan="2" GridPane.rowIndex="6">
+                     <tooltip>
+                        <Tooltip text="Enable for original (i.e. strict) save file format parsing for vanilla FTL. Disable to ignore potential save file format violations to increase compatibility with modded FTL such as Multiverse." />
+                     </tooltip>
+                  </CheckBox>
+                  <Button fx:id="apply" mnemonicParsing="false" onAction="#applyConfig" text="Apply configuration" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
