@@ -43,7 +43,7 @@ public class FtlSaveFile {
                         "(totalCrewObtained)i" +
                         "(shipname)s" +
                         "(shiptype)s" +
-                        "ii[xsi]iiisss[xss]iiii" +
+                        "ii[xsi]sss[xss]iiii" +
                         "(hull)i" +
                         "(fuel)i" +
                         "(droneParts)i" +

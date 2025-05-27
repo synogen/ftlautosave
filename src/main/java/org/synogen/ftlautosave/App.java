@@ -74,7 +74,7 @@ public class App extends Application {
         mainController = loader.getController();
 
         stage.getIcons().add(new Image(App.class.getClassLoader().getResource("save-icon.png").toString()));
-        stage.setTitle("ftlautosave");
+        stage.setTitle("FTL Autosave");
         stage.setScene(new Scene(root));
         stage.show();
 
