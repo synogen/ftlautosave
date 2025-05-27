@@ -1,6 +1,7 @@
 package org.synogen.ftlautosave.save;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.synogen.ftlautosave.App;
 
 import java.io.FileNotFoundException;
@@ -13,12 +14,13 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
 @Data
+@EqualsAndHashCode
 public class BackupSave {
 
     private Path savefile;
     private Path profile;
     private Instant timestamp;
-    private FtlSaveFile saveContent;
+    @EqualsAndHashCode.Exclude private FtlSaveFile saveContent;
 
     public BackupSave(Path savefile, Path profile) {
         this.savefile = savefile;

@@ -91,7 +91,7 @@ public class DirectoryWatch extends Thread {
                 }
             }
         }
-        saves.sort(Collections.reverseOrder(new Util.SortBackupSaves()));
+        saves.sort(new Util.SortBackupSaves());
 
         if (App.config.getLimitBackupSaves() && saves.size() > 500) {
             App.log.info("500 save snapshots exceeded, deleting oldest files");
@@ -103,8 +103,17 @@ public class DirectoryWatch extends Thread {
         }
 
         Platform.runLater(() -> {
-            savesList.getItems().clear();
-            savesList.getItems().addAll(saves);
+            // add only new saves
+            saves.forEach(s -> {
+                if (!savesList.getItems().contains(s)) savesList.getItems().add(0, s);
+            });
+            // remove deleted ones
+            List toRemove = new ArrayList();
+            savesList.getItems().forEach(listItem -> {
+                if (!saves.contains(listItem)) toRemove.add(listItem);
+            });
+            savesList.getItems().removeAll(toRemove);
+
             title.setText("Snapshots (" + savesList.getItems().size() + ")");
         });
     }

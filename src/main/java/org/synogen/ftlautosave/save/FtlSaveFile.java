@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 @Data
 public class FtlSaveFile {
@@ -42,7 +43,7 @@ public class FtlSaveFile {
                         "(totalCrewObtained)i" +
                         "(shipname)s" +
                         "(shiptype)s" +
-                        "ii[xsi]sss[xss]iiii" +
+                        "ii[xsi]iiisss[xss]iiii" +
                         "(hull)i" +
                         "(fuel)i" +
                         "(droneParts)i" +
@@ -87,7 +88,13 @@ public class FtlSaveFile {
                 }
             }
 
-            mapping.parse(path);
+            try {
+                mapping.parse(path);
+            } catch (FTlSaveFormatInvalid fTlSaveFormatInvalid) {
+                invalidFile = true;
+                var variablesRead = mapping.variablesRead();
+                App.log.log(Level.FINE, path.getFileName().toString() + " appears to contain an unsupported save format" + (variablesRead > 0? " (only " + variablesRead + " variables read)" : ""));
+            }
 
             totalShipsDefeated = mapping.getInteger("totalShipsDefeated");
             totalLocationsExplored = mapping.getInteger("totalLocationsExplored");
@@ -106,9 +113,6 @@ public class FtlSaveFile {
 
         } catch (IOException e) {
             App.log.info("Could not read savegame due to I/O exception");
-        } catch (FTlSaveFormatInvalid fTlSaveFormatInvalid) {
-            invalidFile = true;
-            App.log.info(path.getFileName().toString() + " appears to contain an unsupported save format");
         }
     }
 

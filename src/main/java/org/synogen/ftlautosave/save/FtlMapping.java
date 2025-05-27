@@ -160,4 +160,8 @@ public class FtlMapping {
         }
         return "unknown";
     }
+
+    public Integer variablesRead() {
+        return variables.keySet().size();
+    }
 }
