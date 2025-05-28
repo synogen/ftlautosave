@@ -6,8 +6,6 @@ import lombok.Getter;
 import org.synogen.ftlautosave.App;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -51,9 +49,27 @@ public class FtlSaveFile {
                         "(scrap)i"));
     }
 
+    private final HashMap<String, FtlMapping> ALTERNATIVE_MAPPINGS = new HashMap<>();
+    {
+        ALTERNATIVE_MAPPINGS.put("11MV", new FtlMapping(16,
+                "(totalShipsDefeated)i" +
+                        "(totalLocationsExplored)i" +
+                        "(totalScrapCollected)i" +
+                        "(totalCrewObtained)i" +
+                        "(shipname)s" +
+                        "(shiptype)s" +
+                        "ii[xsi]iisss[xss]iiii" +
+                        "(hull)i" +
+                        "(fuel)i" +
+                        "(droneParts)i" +
+                        "(missiles)i" +
+                        "(scrap)i"));
+    }
+
     private boolean invalidFile = false;
 
     private Integer version;
+    private String saveModifier;
 
     private Integer totalShipsDefeated;
     private Integer totalLocationsExplored;
@@ -77,7 +93,7 @@ public class FtlSaveFile {
             version = FtlMapping.readInteger(channel);
             channel.close();
 
-            FtlMapping mapping = SUPPORTED_VERSIONS.get(version);;
+            FtlMapping mapping = SUPPORTED_VERSIONS.get(version);
             if (!SUPPORTED_VERSIONS.containsKey(version)) {
                 int distance = Integer.MAX_VALUE;
                 for (Integer supported : SUPPORTED_VERSIONS.keySet()) {
@@ -90,10 +106,17 @@ public class FtlSaveFile {
 
             try {
                 mapping.parse(path);
-            } catch (FTlSaveFormatInvalid fTlSaveFormatInvalid) {
-                invalidFile = true;
-                var variablesRead = mapping.variablesRead();
-                App.log.log(Level.FINE, path.getFileName().toString() + " appears to contain an unsupported save format" + (variablesRead > 0? " (only " + variablesRead + " variables read)" : ""));
+            } catch (FTLSaveFormatInvalid vanillaSaveFormatInvalid) {
+                // try Multiverse mapping instead if vanilla fails
+                mapping = ALTERNATIVE_MAPPINGS.get("11MV");
+                saveModifier = "Multiverse";
+                try {
+                    mapping.parse(path);
+                } catch (FTLSaveFormatInvalid mvSaveFormatInvalid) {
+                    invalidFile = true;
+                    var variablesRead = mapping.variablesRead();
+                    App.log.log(Level.FINE, path.getFileName().toString() + " appears to contain an unsupported save format" + (variablesRead > 0? " (only " + variablesRead + " variables read)" : ""));
+                }
             }
 
             totalShipsDefeated = mapping.getInteger("totalShipsDefeated");

@@ -37,7 +37,7 @@ public class BackupSave {
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withZone(ZoneId.systemDefault());
-        return formatter.format(timestamp) + " Save format version " + saveContent.getVersion() +
+        return formatter.format(timestamp) + " Save format version " + saveContent.getVersion() + (saveContent.getSaveModifier().length() > 0? " (" + saveContent.getSaveModifier() + ")" : "") +
                 (
                         saveContent.isInvalidFile() ?
                         "\n    " +

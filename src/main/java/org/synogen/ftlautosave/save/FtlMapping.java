@@ -37,7 +37,7 @@ public class FtlMapping {
         this.structure = structure.replaceAll("\\s","");
     }
 
-    public void parse(Path path) throws IOException, FTlSaveFormatInvalid {
+    public void parse(Path path) throws IOException, FTLSaveFormatInvalid {
         SeekableByteChannel channel = Files.newByteChannel(path, StandardOpenOption.READ);
         channel.position(startAt);
 
@@ -46,7 +46,7 @@ public class FtlMapping {
         channel.close();
     }
 
-    private void parseStructure(SeekableByteChannel channel, String structure) throws IOException, FTlSaveFormatInvalid {
+    private void parseStructure(SeekableByteChannel channel, String structure) throws IOException, FTLSaveFormatInvalid {
         Pattern definition = Pattern.compile("(s)|(i)|(\\(.+?\\)[s|i])|(\\[(\\d+|x)(.+?)\\])");
         Matcher matcher = definition.matcher(structure);
 
@@ -81,10 +81,10 @@ public class FtlMapping {
      * @param structure
      * @throws IOException
      */
-    private void skipVariableStructures(SeekableByteChannel channel, String structure) throws IOException, FTlSaveFormatInvalid {
+    private void skipVariableStructures(SeekableByteChannel channel, String structure) throws IOException, FTLSaveFormatInvalid {
         Integer times = readInteger(channel);
         if (times < 0 || times > MAX_SKIP_TIMES) {
-            throw new FTlSaveFormatInvalid(channel.position() - 4, times);
+            throw new FTLSaveFormatInvalid(channel.position() - 4, times);
         }
         skipStructureTimes(channel, structure, times);
     }
@@ -95,7 +95,7 @@ public class FtlMapping {
      * @param structure structure string using 'i' for integer and 's' for string, so "iss" would read one integer and two variable length strings
      * @throws IOException
      */
-    private void skipStructure(SeekableByteChannel channel, String structure) throws IOException, FTlSaveFormatInvalid {
+    private void skipStructure(SeekableByteChannel channel, String structure) throws IOException, FTLSaveFormatInvalid {
         char[] struct = structure.toCharArray();
         for (int i = 0; i < struct.length; i++) {
             switch (struct[i]) {
@@ -112,7 +112,7 @@ public class FtlMapping {
      * @param times
      * @throws IOException
      */
-    private void skipStructureTimes(SeekableByteChannel channel, String structure, Integer times) throws IOException, FTlSaveFormatInvalid {
+    private void skipStructureTimes(SeekableByteChannel channel, String structure, Integer times) throws IOException, FTLSaveFormatInvalid {
         for (int i = 0; i < times; i++) {
             skipStructure(channel, structure);
         }
@@ -137,10 +137,10 @@ public class FtlMapping {
      * @return
      * @throws IOException
      */
-    private String readNextString(SeekableByteChannel channel) throws IOException, FTlSaveFormatInvalid {
+    private String readNextString(SeekableByteChannel channel) throws IOException, FTLSaveFormatInvalid {
         Integer length = readInteger(channel);
         if (length <= 0 || length> MAX_READ_BUFFER) {
-            throw new FTlSaveFormatInvalid(channel.position() - 4, length);
+            throw new FTLSaveFormatInvalid(channel.position() - 4, length);
         }
         ByteBuffer buffer = ByteBuffer.allocate(length);
         channel.read(buffer);
