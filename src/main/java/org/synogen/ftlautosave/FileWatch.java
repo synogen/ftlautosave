@@ -45,7 +45,7 @@ public class FileWatch extends Thread {
 
 				try {
 					if (currentModification.compareTo(previousModification) != 0) {
-						App.log.info(filename + " has changed, saving new backup");
+						App.log.info(filename + " has changed, saving new backup " + file.getFileName() + "." + currentModification);
 						Path backup = file.resolveSibling(file.getFileName() + "." + currentModification);
 						Files.copy(file, backup, StandardCopyOption.REPLACE_EXISTING);
 						previousModification = currentModification;
