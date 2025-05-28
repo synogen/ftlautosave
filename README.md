@@ -6,6 +6,8 @@ Autosave program for **FTL Faster Than Light - Advanced Edition**, simply backs 
 Faster Than Light continuously changes the profile and the save-file of the player (usually ae_prof.sav and continue.sav) while playing, but does not allow keeping saves / reverting back to an old save. This program circumvents that by monitoring the two save-files (profile and game progress) and creating a backup copy every time one of them changes.
 This allows you to restore a previous save-state and continue from there.
 
+**Info:** As of right now (2025) this program has been updated and should work fine for Windows, but there is also a fork made by joerivandervelde at [https://github.com/joerivandervelde/ftlautosave](https://github.com/joerivandervelde/ftlautosave) that has some nice additional features and should work on other platforms as well.
+
 ## Run
 
 If run directly in FTL's game folder it should detect the executable to run FTL automatically, otherwise that has to be set manually.
