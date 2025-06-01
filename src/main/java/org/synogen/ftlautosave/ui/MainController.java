@@ -142,14 +142,18 @@ public class MainController {
 
     public void startFtl() throws IOException {
         App.log.info("Starting FTL");
-        Path ftlRunPath = Paths.get(App.config.getFtlRunPath());
-        Path ftlWorkingDirectory = ftlRunPath.getParent();
 
-        new ProcessBuilder()
-                .directory(ftlWorkingDirectory.toFile())
-                .command(ftlRunPath.toString())
-                .inheritIO()
-                .start();
+        try {
+            Path ftlRunPath = Paths.get(App.config.getFtlRunPath());
+            Path ftlWorkingDirectory = ftlRunPath.getParent();
+            new ProcessBuilder()
+                    .directory(ftlWorkingDirectory.toFile())
+                    .command(ftlRunPath.toString())
+                    .inheritIO()
+                    .start();
+        } catch (IOException e) {
+            App.log.warning("Could not start FTL, make sure the run command path is correctly set");
+        }
     }
 
     public void fileTypeChanged(ActionEvent actionEvent) {
