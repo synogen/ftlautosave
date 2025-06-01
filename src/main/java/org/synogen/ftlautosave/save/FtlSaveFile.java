@@ -69,7 +69,7 @@ public class FtlSaveFile {
     private boolean invalidFile = false;
 
     private Integer version;
-    private String saveModifier;
+    private String saveModifier = "";
 
     private Integer totalShipsDefeated;
     private Integer totalLocationsExplored;
