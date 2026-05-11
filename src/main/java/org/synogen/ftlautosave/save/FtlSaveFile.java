@@ -68,22 +68,22 @@ public class FtlSaveFile {
 
     private boolean invalidFile = false;
 
-    private Integer version;
+    private Integer version = 0;
     private String saveModifier = "";
 
-    private Integer totalShipsDefeated;
-    private Integer totalLocationsExplored;
-    private Integer totalScrapCollected;
-    private Integer totalCrewObtained;
+    private Integer totalShipsDefeated = 0;
+    private Integer totalLocationsExplored = 0;
+    private Integer totalScrapCollected = 0;
+    private Integer totalCrewObtained = 0;
 
-    private String shipname;
-    private String shiptype;
+    private String shipname = "";
+    private String shiptype = "";
 
-    private Integer hull;
-    private Integer fuel;
-    private Integer droneParts;
-    private Integer missiles;
-    private Integer scrap;
+    private Integer hull = 0;
+    private Integer fuel = 0;
+    private Integer droneParts = 0;
+    private Integer missiles = 0;
+    private Integer scrap = 0;
 
     public FtlSaveFile(Path path) {
         this.path = path;
