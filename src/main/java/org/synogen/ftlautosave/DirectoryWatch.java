@@ -60,13 +60,13 @@ public class DirectoryWatch extends Thread {
         if (Files.exists(savePath)) {
             try {
                 DirectoryStream<Path> savefiles = Files.newDirectoryStream(savePath, entry -> {
-                    if (entry.getFileName().toString().startsWith(App.config.getSavefile() + ".") && entry.getFileName().toString().matches(".*\\d+$")) {
+                    if (entry.getFileName().toString().startsWith(App.config.getSavefile() + ".") && entry.getFileName().toString().matches(".*\\.\\d+$")) {
                         return true;
                     }
                     return false;
                 });
                 DirectoryStream<Path> profiles = Files.newDirectoryStream(savePath, entry -> {
-                    if (entry.getFileName().toString().startsWith(App.config.getProfile() + ".") && entry.getFileName().toString().matches(".*\\d+$")) {
+                    if (entry.getFileName().toString().startsWith(App.config.getProfile() + ".") && entry.getFileName().toString().matches(".*\\.\\d+$")) {
                         return true;
                     }
                     return false;
@@ -83,12 +83,16 @@ public class DirectoryWatch extends Thread {
 
         for (Path savefile : savefilesList) {
             for (Path profile : profilesList) {
-                //find a profile with a timestamp that matches closely
-                Instant saveTime = Util.getTimestamp(savefile.getFileName().toString());
-                Instant profileTime = Util.getTimestamp(profile.getFileName().toString());
+                try {
+                    //find a profile with a timestamp that matches closely
+                    Instant saveTime = Util.getTimestamp(savefile.getFileName().toString());
+                    Instant profileTime = Util.getTimestamp(profile.getFileName().toString());
 
-                if (Math.abs(saveTime.until(profileTime, ChronoUnit.MILLIS)) < 500) {
-                    saves.add(new BackupSave(savefile, profile));
+                    if (Math.abs(saveTime.until(profileTime, ChronoUnit.MILLIS)) < 500) {
+                        saves.add(new BackupSave(savefile, profile));
+                    }
+                } catch (NumberFormatException e) {
+                    App.log.warning("Skipping unparseable backup file: " + savefile.getFileName() + " or " + profile.getFileName());
                 }
             }
         }
