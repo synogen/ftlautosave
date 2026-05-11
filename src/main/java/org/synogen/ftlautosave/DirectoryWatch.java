@@ -96,7 +96,7 @@ public class DirectoryWatch extends Thread {
         saves.sort(Collections.reverseOrder(new Util.SortBackupSaves()));
         if (App.config.getLimitBackupSaves() && saves.size() > 500) {
             App.log.info("500 save snapshots exceeded, deleting oldest files");
-            List<BackupSave> purgeList = saves.subList(500 - 1, saves.size() - 1);
+            List<BackupSave> purgeList = saves.subList(500, saves.size());
             for (BackupSave save : purgeList) {
                 save.deleteFiles();
             }
