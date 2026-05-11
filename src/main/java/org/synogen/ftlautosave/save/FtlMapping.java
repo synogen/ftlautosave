@@ -47,7 +47,7 @@ public class FtlMapping {
     }
 
     private void parseStructure(SeekableByteChannel channel, String structure) throws IOException, FTLSaveFormatInvalid {
-        Pattern definition = Pattern.compile("(s)|(i)|(\\(.+?\\)[s|i])|(\\[(\\d+|x)(.+?)\\])");
+        Pattern definition = Pattern.compile("(s)|(i)|(\\(.+?\\)[si])|(\\[(\\d+|x)(.+?)\\])");
         Matcher matcher = definition.matcher(structure);
 
         while (matcher.find()) {
