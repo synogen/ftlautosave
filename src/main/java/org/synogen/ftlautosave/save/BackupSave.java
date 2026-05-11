@@ -4,8 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.synogen.ftlautosave.App;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
@@ -68,7 +68,7 @@ public class BackupSave {
             String filename = this.savefile.toString();
             Files.delete(this.savefile);
             App.log.info("Deleted " + filename);
-        } catch (FileNotFoundException e) {
+        } catch (NoSuchFileException e) {
             // OK
         } catch (IOException e) {
             App.log.info("Could not delete " + this.savefile.toString());
@@ -78,7 +78,7 @@ public class BackupSave {
             String filename = this.profile.toString();
             Files.delete(this.profile);
             App.log.info("Deleted " + filename);
-        } catch (FileNotFoundException e) {
+        } catch (NoSuchFileException e) {
             // OK
         } catch (IOException e) {
             App.log.info("Could not delete " + this.profile.toString());
