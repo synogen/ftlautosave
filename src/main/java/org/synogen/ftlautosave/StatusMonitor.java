@@ -32,7 +32,7 @@ public class StatusMonitor extends Thread{
     @Override
     public void run() {
         App.log.info("Status monitor starting");
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             try {
                 if (App.profileWatcher.isAlive()) {
                     if (App.profileWatcher.isWatching()) {
@@ -79,6 +79,7 @@ public class StatusMonitor extends Thread{
                 sleep(300);
             } catch (InterruptedException e) {
                 App.log.info("Status monitor exiting");
+                Thread.currentThread().interrupt();
             }
         }
     }
