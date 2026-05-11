@@ -19,8 +19,8 @@ public class FtlSaveFile {
     @Getter(AccessLevel.NONE)
     private Path path;
 
-    private final HashMap<Integer, FtlMapping> SUPPORTED_VERSIONS = new HashMap<>();
-    {
+    private static final HashMap<Integer, FtlMapping> SUPPORTED_VERSIONS = new HashMap<>();
+    static {
         SUPPORTED_VERSIONS.put(9, new FtlMapping(12,
                 "(totalShipsDefeated)i" +
                         "(totalLocationsExplored)i" +
@@ -49,8 +49,8 @@ public class FtlSaveFile {
                         "(scrap)i"));
     }
 
-    private final HashMap<String, FtlMapping> ALTERNATIVE_MAPPINGS = new HashMap<>();
-    {
+    private static final HashMap<String, FtlMapping> ALTERNATIVE_MAPPINGS = new HashMap<>();
+    static {
         ALTERNATIVE_MAPPINGS.put("11MV", new FtlMapping(16,
                 "(totalShipsDefeated)i" +
                         "(totalLocationsExplored)i" +
