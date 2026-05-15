@@ -64,6 +64,27 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>clean-dist</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <configuration>
+                            <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                            <filesets>
+                                <fileset>
+                                    <directory>${project.basedir}/dist</directory>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
@@ -74,6 +95,61 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>org.synogen.ftlautosave.App</mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeScope>runtime</includeScope>
+                            <outputDirectory>${project.build.directory}/libs</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.panteleyev</groupId>
+                <artifactId>jpackage-maven-plugin</artifactId>
+                <version>1.7.4</version>
+                <executions>
+                    <execution>
+                        <id>jpackage</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jpackage</goal>
+                        </goals>
+                        <configuration>
+                            <name>FTL Autosave</name>
+                            <appVersion>${project.version}</appVersion>
+                            <vendor>synogen</vendor>
+                            <icon>${project.basedir}/src/main/resources/save-icon.ico</icon>
+                            <mainJar>ftlautosave-${project.version}.jar</mainJar>
+                            <mainClass>org.synogen.ftlautosave.App</mainClass>
+                            <modulePaths>
+                                <path>${project.build.directory}/libs</path>
+                            </modulePaths>
+                            <input>${project.build.directory}</input>
+                            <addModules>
+                                <module>java.base</module>
+                                <module>java.logging</module>
+                                <module>java.desktop</module>
+                                <module>javafx.controls</module>
+                                <module>javafx.graphics</module>
+                                <module>javafx.base</module>
+                                <module>javafx.fxml</module>
+                                <module>java.xml</module>
+                            </addModules>
+                            <type>APP_IMAGE</type>
+                            <destination>${project.basedir}/dist</destination>
                         </configuration>
                     </execution>
                 </executions>
