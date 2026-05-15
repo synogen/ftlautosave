@@ -131,7 +131,7 @@
                             <name>FTL Autosave</name>
                             <appVersion>${project.version}</appVersion>
                             <vendor>synogen</vendor>
-                            <icon>${project.basedir}/src/main/resources/save-icon.ico</icon>
+                            <icon>${project.basedir}/src/main/resources/save-icon.png</icon>
                             <mainJar>ftlautosave-${project.version}.jar</mainJar>
                             <mainClass>org.synogen.ftlautosave.App</mainClass>
                             <modulePaths>
