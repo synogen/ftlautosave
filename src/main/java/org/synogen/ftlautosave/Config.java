@@ -16,17 +16,32 @@ public class Config {
 		this.watchInterval = 1000;
 		this.profile = "ae_prof.sav";
 		this.savefile = "continue.sav";
+		Path path = Paths.get("FTLGame.exe");
 		if (System.getProperties().getProperty("os.name").contains("Windows")) {
-			ftlSavePath = System.getProperties().getProperty("user.home") + "\\My Documents\\My Games\\FasterThanLight";
+			String detectedSavePath = RegistryUtil.detectFtlSavePath();
+			if (detectedSavePath != null) {
+				ftlSavePath = detectedSavePath;
+			} else {
+				ftlSavePath = System.getProperties().getProperty("user.home") + "\\My Documents\\My Games\\FasterThanLight";
+			}
+
+			String detectedRunPath = RegistryUtil.detectFtlRunPath();
+			if (detectedRunPath != null) {
+				ftlRunPath = detectedRunPath;
+			} else {
+				if (path.toFile().exists()) {
+					ftlRunPath = path.toAbsolutePath().toString();
+				} else {
+					ftlRunPath = "FTLGame.exe";
+				}
+			}
 		} else {
-			// TODO detect FTL save path for other operating systems
 			ftlSavePath = "";
-		}
-		Path ftl = Paths.get("FTLGame.exe");
-		if (ftl.toFile().exists()) {
-            this.ftlRunPath = ftl.toAbsolutePath().toString();
-        } else {
-			this.ftlRunPath = "FTLGame.exe";
+			if (path.toFile().exists()) {
+				ftlRunPath = path.toAbsolutePath().toString();
+			} else {
+				ftlRunPath = "FTLGame.exe";
+			}
 		}
 		this.autoStartFtl = false;
 		this.autoUpdateSnapshots = true;
